@@ -1,38 +1,79 @@
-.App {
+:root {
+  --cor-principal: #68dcfc;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1em;
+  color: var(--cor-principal);
+  margin: 0em 0em 1em 0em;
+}
+
+.relogio {
+  display: flex;
+  gap: 1em;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1em;
+}
+
+.relogio__texto {
   text-align: center;
+  cursor: none;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.relogio__botao {
+  background-color: var(--cor-principal);
+  padding: 0.5em 1em;
+  border: none;
+  border-radius: 3em;
+  font-weight: 800;
+  cursor: pointer;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.conteudo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.conteudo__texto {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  gap: 0.1em;
+  border-radius: 5%;
+  width: fit-content;
+  padding: 1em;
+  border: solid var(--cor-principal) 0.2em;
 }
 
-.App-link {
-  color: #61dafb;
+.dados__botao {
+  background-color: var(--cor-principal);
+  padding: 0.5em;
+  border: none;
+  border-radius: 3em;
+  font-weight: 800;
+  cursor: pointer;
+  width: 100%;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.dados__link {
+  text-decoration: none;
+  color: #000000;
+}
+
+.dados__link:hover {
+  color: var(--cor-principal);
+}
+
+.footer {
+  margin: 1em 0em 0em 0em;
+  text-align: center;
+  padding: 1em;
+  font-weight: 600;
+  background-color: var(--cor-principal);
 }
