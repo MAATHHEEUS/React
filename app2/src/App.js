@@ -47,6 +47,50 @@ export default function App() {
     }
   }
 
+  const salvar=(chaves, valores)=>{
+    valores.map(
+      (elemento, indice)=>{
+        if(elemento == ''){
+          alert("O campo *" + chaves[indice] + "* está vazio!")
+          return
+        }
+        localStorage.setItem(chaves[indice], elemento)
+    })
+    let soma = parseFloat(valores[2])+parseFloat(valores[3])+parseFloat(valores[4])
+    localStorage.setItem("soma", soma)
+    localStorage.setItem("status", soma >= 60 ? "aprovado" : "reprovado")
+    alert("Dados salvos!")
+  }
+
+  const camposForm = [
+    "nome",
+    "carro",
+    "notaDesempenho",
+    "notaConsumo",
+    "notaConforto"
+  ]
+
+  const consultar=(chaves)=>{
+    chaves.map(
+      (elemento, indice)=>
+      alert(chaves[indice] + " : " + localStorage.getItem(elemento))
+    )
+    alert("Soma das notas : " + localStorage.getItem("soma"))
+    alert("Resultado : " + localStorage.getItem("status"))
+  }
+
+  const apagar=(chaves)=>{
+    if(window.confirm("Deseja apagar os dados?")){
+      chaves.map(
+        (elemento, indice)=>
+        localStorage.removeItem(elemento)
+      )
+      localStorage.removeItem("soma")
+      localStorage.removeItem("status")
+      alert("Dados apagados!")
+    }
+  }
+
   return (
     <main className='main'>
       <h1 className='main__title'>Formulário</h1>
@@ -61,6 +105,11 @@ export default function App() {
       <Nota atributoAvaliado="consumo" nota={notas.consumo} setNotas={handleNotas}/>
       <Nota atributoAvaliado="conforto" nota={notas.conforto} setNotas={handleNotas}/>
       <Resultado somaNotas={parseFloat(notas.desempenho)+parseFloat(notas.consumo)+parseFloat(notas.conforto)}/>
+      <div className='main__botoes'>
+        <button onClick={()=>{salvar(camposForm, [nome, carro, notas.desempenho, notas.conforto, notas.consumo])}} className='main__botoes__salvar'>Salvar</button>
+        <button onClick={()=>{consultar(camposForm)}} className='main__botoes__consultar'>Consultar</button>
+        <button onClick={()=>{apagar(camposForm)}} className='main__botoes__apagar'>Apagar</button>
+      </div>
     </main>
   );
 }
