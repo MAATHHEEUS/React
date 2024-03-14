@@ -1,6 +1,7 @@
 import React,{useState} from 'react' 
 import Nota from './componentes/Nota'
 import Resultado from './componentes/Resultado'
+import Imagem from './componentes/Imagem'
 import './App.css'
 
 export default function App() {
@@ -101,6 +102,7 @@ export default function App() {
       <select value={carro} onChange={(e)=>{setCarro(e.target.value)}}>
         {listaCarros}
       </select>
+      <Imagem carro={carro}/>
       <Nota atributoAvaliado="desempenho" nota={notas.desempenho} setNotas={handleNotas}/>
       <Nota atributoAvaliado="consumo" nota={notas.consumo} setNotas={handleNotas}/>
       <Nota atributoAvaliado="conforto" nota={notas.conforto} setNotas={handleNotas}/>
