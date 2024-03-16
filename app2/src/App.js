@@ -6,6 +6,7 @@ import './App.css'
 
 export default function App() {
 
+  // Objeto com os carros
   const carros = [
     {ano: '2024', modelo: 'FastBack'},
     {ano: '2020', modelo: 'Polo'},
@@ -13,11 +14,13 @@ export default function App() {
     {ano: '2019', modelo: 'Fit'}
   ]
 
+  // Usando função map para colocar os carros em forma de lista
   const listaCarros = carros.map(
     (elemento, indice)=>
       <option value={elemento.modelo}>{elemento.modelo} - {elemento.ano}</option>
   )
 
+  // States relacionados aos inputs da tela
   const [nome, setNome] = useState('')
   const [carro, setCarro] = useState('FastBack')
   const [notas, setNotas] = useState({
@@ -26,6 +29,7 @@ export default function App() {
     "conforto":"0,0"
   })
 
+  // Função para manipular o state notas
   const handleNotas=(e)=>{
     if(e.target.getAttribute('name')=='desempenho'){
       setNotas({
@@ -48,6 +52,7 @@ export default function App() {
     }
   }
 
+  // Função para salvar/modificar os dados digitados no localStorage
   const salvar=(chaves, valores)=>{
     valores.map(
       (elemento, indice)=>{
@@ -63,14 +68,7 @@ export default function App() {
     alert("Dados salvos!")
   }
 
-  const camposForm = [
-    "nome",
-    "carro",
-    "notaDesempenho",
-    "notaConsumo",
-    "notaConforto"
-  ]
-
+  // Função para consultar os dados que estão salvos no localStorage
   const consultar=(chaves)=>{
     chaves.map(
       (elemento, indice)=>
@@ -80,6 +78,7 @@ export default function App() {
     alert("Resultado : " + localStorage.getItem("status"))
   }
 
+  // Função para apagar os dados que estão armazenados no localStorage
   const apagar=(chaves)=>{
     if(window.confirm("Deseja apagar os dados?")){
       chaves.map(
@@ -91,6 +90,15 @@ export default function App() {
       alert("Dados apagados!")
     }
   }
+
+  // Variável para saber quais os campos do form
+  const camposForm = [
+    "nome",
+    "carro",
+    "notaDesempenho",
+    "notaConsumo",
+    "notaConforto"
+  ]
 
   return (
     <main className='main'>
