@@ -13,6 +13,7 @@ export default class Imagem extends React.Component {
     }
 
     verImagem(carro){
+        alert(document.getElementById('inputSelectCarro').value)
         if(carro == 'FastBack'){      
             this.setState({
                 carro:FastBack
@@ -46,7 +47,7 @@ export default class Imagem extends React.Component {
 
     render() {
         return(
-            <div className='main__caixaImagem'>
+            <div className='main__caixaImagem'>      
                 <button className='main__caixaImagem__botao' onClick={()=>this.verImagem(this.props.carro)}>Ver carro</button>
                 <div id="myModal" className="modal">
                     <span className="close">&times;</span>

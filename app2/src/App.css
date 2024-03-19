@@ -59,6 +59,32 @@ input, select {
   padding: 0.3em;
 }
 
+.main__botoesRadio {
+  display: flex;
+}
+
+.main__botoesRadio__field {
+  display: flex;
+  font-weight: 600;
+  color: var(--cor-secundaria);
+  border: 1px solid var(--cor-primaria);
+}
+
+.main__botoesRadio__radio {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  padding: 0.5rem;
+  font-weight: 600;
+  color: var(--cor-secundaria);
+}
+
+.main__botoesRadio__radio input {
+  cursor: pointer;
+}
+
 .main__caixaImagem {
   display: flex;
   justify-content: center;
@@ -66,6 +92,7 @@ input, select {
 
 .main__caixaImagem__botao {
   margin-top: 8px;
+  margin-left: 8px;
   border-radius: 1em;
   padding: 1em;
   border: none;

@@ -15,10 +15,45 @@ export default function Home() {
   ]
 
   // Usando função map para colocar os carros em forma de lista
-  const listaCarros = carros.map(
-    (elemento, indice)=>
-      <option key={indice} value={elemento.modelo}>{elemento.modelo} - {elemento.ano}</option>
+  const listaCarros=(filtro)=> carros.map(
+    (elemento, indice)=>{
+      let options = []
+      if(elemento.ano == filtro || filtro == ''){
+        options.push(<option key={indice} value={elemento.modelo}>{elemento.modelo} - {elemento.ano}</option>)
+      }
+      return options
+    }
   )
+
+  const [filtro, setFiltro] = useState('')
+
+
+  const botoesFiltro=(lista, stateFiltro)=>{
+    // Filtra os anos
+    const anos = []
+    lista.forEach(element => {
+        if(!anos.includes(element.ano))anos.push(element.ano)
+    })
+    
+    // Para cada ano cria um botão
+    const botoes = []
+    anos.forEach(ano => {
+        let id = "radio_" + ano
+        botoes.push(
+            <div className='main__botoesRadio__radio'>   
+                <input type="radio" id={id} name="ano" value={ano} onChange={(e)=>stateFiltro(e.target.value)}/>
+                <label htmlFor={id}>{ano}</label>
+            </div>  
+        )
+    })
+
+    return(
+      <fieldset className='main__botoesRadio__field'>
+        <legend>Filtrar por ano:</legend>
+        {botoes}
+      </fieldset>
+    )
+  }
 
   // States relacionados aos inputs da tela
   const [nome, setNome] = useState('')
@@ -106,12 +141,14 @@ export default function Home() {
       <Menu/>
       <label className='main__label'>Digite seu nome </label>
       <input type="text" placeholder='digite seu nome' value={nome} onChange={(e)=>{setNome(e.target.value)}}/>
-      <br/>
       <label className='main__label'>Selecione um carro </label>
-      <select value={carro} onChange={(e)=>{setCarro(e.target.value)}}>
-        {listaCarros}
+      <select id='inputSelectCarro' value={carro} onChange={(e)=>{setCarro(e.target.value)}}>
+        {listaCarros(filtro)}
       </select>
-      <Imagem carro={carro}/>
+      <div className='main__botoesRadio'>
+        {botoesFiltro(carros, setFiltro)}
+        <Imagem carro={carro}/>
+      </div>
       <Nota atributoAvaliado="desempenho" nota={notas.desempenho} setNotas={handleNotas}/>
       <Nota atributoAvaliado="consumo" nota={notas.consumo} setNotas={handleNotas}/>
       <Nota atributoAvaliado="conforto" nota={notas.conforto} setNotas={handleNotas}/>
