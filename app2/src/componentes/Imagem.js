@@ -13,7 +13,6 @@ export default class Imagem extends React.Component {
     }
 
     verImagem(carro){
-        alert(document.getElementById('inputSelectCarro').value)
         if(carro == 'FastBack'){      
             this.setState({
                 carro:FastBack

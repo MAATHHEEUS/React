@@ -1,0 +1,33 @@
+.main__input {
+    width: fit-content;
+    font-size: 1rem;
+    border-radius: 0.5rem;
+    border: none;
+    padding: 0.3rem;
+    margin-bottom: 1rem;
+}
+
+p {
+    font-size: 1rem;
+    color: var(--cor-secundaria);
+    font-weight: 600;
+}
+
+.main__botaoCalcular {
+    margin-bottom: 8px;
+    border-radius: 1rem;
+    padding: 1rem;
+    border: none;
+    font-weight: 600;
+    color: var(--cor-secundaria);
+    background-color: #008000;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+
+.main__tabela, tbody, th, td {
+    color: var(--cor-secundaria);
+    border: 0.2rem solid var(--cor-primaria);
+    border-collapse: collapse;
+    padding: 0.5rem;
+}

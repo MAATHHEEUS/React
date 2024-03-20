@@ -36,7 +36,7 @@ export default class Menu extends React.Component{
         return(
             <nav className='main__menu'>
                 <a onClick={()=>this.trocarPagina(0)} className="main__menu__link">Home</a>
-                <a onClick={()=>this.trocarPagina(1)} className="main__menu__link">Página 1</a>
+                <a onClick={()=>this.trocarPagina(1)} className="main__menu__link">IMC</a>
                 <a onClick={()=>this.trocarPagina(2)} className="main__menu__link">Página 2</a>
             </nav>
         )
