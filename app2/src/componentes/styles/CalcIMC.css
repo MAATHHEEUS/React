@@ -1,16 +1,43 @@
-.main__input {
-    width: fit-content;
-    font-size: 1rem;
-    border-radius: 0.5rem;
-    border: none;
-    padding: 0.3rem;
-    margin-bottom: 1rem;
+.main__conteudo {
+    display: flex;
+    gap: 1rem;
 }
 
-p {
-    font-size: 1rem;
-    color: var(--cor-secundaria);
+.main__conteudo__calculadora {
+    border: 1px solid red;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.div_botoesCalculadora {
+    display: flex;
+    justify-content: center;
+}
+
+.main__botaoCalculadora {
+    margin: 8px;
+    border-radius: 1rem;
+    padding: 1rem;
+    border: none;
     font-weight: 600;
+    color: var(--cor-secundaria);
+    background-color: var(--cor-primaria);
+    text-transform: uppercase;
+    cursor: pointer;
+}
+
+.main__botaoApagar {
+    margin-bottom: 8px;
+    border-radius: 1rem;
+    padding: 1rem;
+    border: none;
+    font-weight: 600;
+    color: var(--cor-secundaria);
+    background-color: #FF0000;
+    text-transform: uppercase;
+    cursor: pointer;
 }
 
 .main__botaoCalcular {
@@ -23,7 +50,29 @@ p {
     background-color: #008000;
     text-transform: uppercase;
     cursor: pointer;
-  }
+}
+
+.main__conteudo__resultado {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.main__input {
+    width: fit-content;
+    font-size: 1rem;
+    border-radius: 0.5rem;
+    border: 0.3rem solid;
+    border-color: transparent;
+    padding: 0.3rem;
+    margin-bottom: 1rem;
+}
+
+p {
+    font-size: 1rem;
+    color: var(--cor-secundaria);
+    font-weight: 600;
+}
 
 .main__tabela, tbody, th, td {
     color: var(--cor-secundaria);
