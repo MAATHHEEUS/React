@@ -1,12 +1,10 @@
 .main__conteudo {
     display: flex;
-    gap: 1rem;
+    gap: 3rem;
 }
 
 .main__conteudo__calculadora {
-    border: 1px solid red;
     display: flex;
-    justify-content: center;
     align-items: center;
     flex-direction: column;
 }
@@ -26,6 +24,14 @@
     background-color: var(--cor-primaria);
     text-transform: uppercase;
     cursor: pointer;
+}
+
+.div_linha4 {
+    margin-left: 1rem;
+}
+
+.div_linha5 {
+    margin-left: 1rem;
 }
 
 .main__botaoApagar {
@@ -79,4 +85,17 @@ p {
     border: 0.2rem solid var(--cor-primaria);
     border-collapse: collapse;
     padding: 0.5rem;
+}
+
+/* Mobile */
+@media (max-width: 425px){
+    .div_linha4 {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .div_linha5 {
+        display: flex;
+        flex-direction: column;
+    }
 }

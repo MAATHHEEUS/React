@@ -139,8 +139,8 @@ export default function CalcIMC(){
                     <div className='div_botoesCalculadora'>{botaoCalculadora(1)}{botaoCalculadora(2)}{botaoCalculadora(3)}</div>
                     <div className='div_botoesCalculadora'>{botaoCalculadora(4)}{botaoCalculadora(5)}{botaoCalculadora(6)}</div>
                     <div className='div_botoesCalculadora'>{botaoCalculadora(7)}{botaoCalculadora(8)}{botaoCalculadora(9)}</div>
-                    <div>{botaoSelecionarInput('peso')}{botaoCalculadora(0)}{botaoSelecionarInput('altura')}</div>
-                    <div>{botaoApagarInput()}{botaoCalculadora(',')}{calcular(setResultado)}</div>
+                    <div className='div_linha4'>{botaoSelecionarInput('peso')}{botaoCalculadora(0)}{botaoSelecionarInput('altura')}</div>
+                    <div className='div_linha5'>{botaoApagarInput()}{botaoCalculadora(',')}{calcular(setResultado)}</div>
                 </div>
                 <div className='main__conteudo__resultado'>  
                     {inputPeso(peso, setPeso)}

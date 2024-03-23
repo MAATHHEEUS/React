@@ -16,7 +16,6 @@ export default function App() {
 
   const retornaPagina=()=>{
     if(pagina == 1) return <CalcIMC/>
-    else if(pagina == 2) return <><h1>Pagina {pagina}</h1></>
     else return <Home/>
   }
 
