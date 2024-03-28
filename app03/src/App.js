@@ -75,23 +75,36 @@ function App() {
 
   // Funções
   const addDigitoTela=(digito)=> {
-    // Só digita ponto na tela se não houver nenhum 
-    if((digito == '+' || digito == '-' || digito == '*' || digito == '/' || digito == '.') && String(valorTela).endsWith(digito)){
+    if(digito == '+' || digito == '-' || digito == '*' || digito == '/' || digito == '.'){
+      // Se não tiver valor na tela não pode começar com operação
+      if(valorTela == '')return;
+      // Verifica o último caracter digitado na tela
+      if(verificaDigitoEspecial())return;
+    }
+    if((digito == '+' || digito == '-' || digito == '*' || digito == '/') && operado){
+      setOperado(false);
+      setValorTela(resultado+digito);
+      return;
+    }else if(operado){
+      setValorTela(digito);
+      setOperado(false);
       return;
     }else{
-      if((digito == '+' || digito == '-' || digito == '*' || digito == '/') && operado){
-        setOperado(false);
-        setValorTela(resultado+digito);
-        return;
-      }else if(operado){
-        setValorTela(digito);
-        setOperado(false);
-        return;
-      }else{
-        const valorDigitadoTela = valorTela+digito;
-        setValorTela(valorDigitadoTela);
-      }
+      const valorDigitadoTela = valorTela+digito;
+      setValorTela(valorDigitadoTela);
     }
+  }
+
+  // Função para verificar se o último valor digitado na tela é um caracter de operação
+  const verificaDigitoEspecial=()=> {
+    let digitosEspeciais = ['.', '+', '-', '/', '*'];
+    let retorno = false;
+    digitosEspeciais.forEach((elemento) => {
+      if(String(valorTela).endsWith(elemento)){
+        retorno = true;
+      }
+    })
+    return retorno;
   }
 
   const limparMemoria=()=> {
@@ -103,22 +116,25 @@ function App() {
   }
 
   const Operacao=(oper)=> {
-    if(oper == 'backSpace'){
-      let vTela = valorTela;
-      vTela = vTela.substring(0, vTela.length-1);
-      setValorTela(vTela);
-      setOperado(false);
-      return;
-    }
-    try{
-      // Eval retorna o resultado da expressão passada - Cálculo
-      const r = eval(valorTela)
-      setAcumulador(r);
-      setResultado(r);
-      setOperado(true);
-    }
-    catch{
-      setResultado('#ERRO');
+    // Só realiza operação se tela não estiver vazia
+    if(!valorTela == ''){
+      if(oper == 'backSpace'){
+        let vTela = valorTela;
+        vTela = vTela.substring(0, vTela.length-1);
+        setValorTela(vTela);
+        setOperado(false);
+        return;
+      }
+      try{
+        // Eval retorna o resultado da expressão passada - Cálculo
+        const r = eval(valorTela)
+        setAcumulador(r);
+        setResultado(r);
+        setOperado(true);
+      }
+      catch{
+        setResultado('#ERRO');
+      } 
     }
   }
   
@@ -131,7 +147,7 @@ function App() {
           {btn('AC', limparMemoria)}
           {btn('(', ()=>addDigitoTela('('))}
           {btn(')', ()=>addDigitoTela(')'))}
-          {btn('/', ()=>addDigitoTela(')'))}
+          {btn('/', ()=>addDigitoTela('/'))}
           {btn('7', ()=>addDigitoTela('7'))}
           {btn('8', ()=>addDigitoTela('8'))}
           {btn('9', ()=>addDigitoTela('9'))}
