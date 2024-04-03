@@ -65,6 +65,10 @@ const cssBotoes={
   flexWrap: 'wrap'
 }
 
+const cssTitulo={
+  fontSize: "1.5rem"
+}
+
 function Calculadora() {
   
   const [valorTela, setValorTela] = useState('');
@@ -140,7 +144,7 @@ function Calculadora() {
   return (
     <>
       <div style={cssContainer}>
-        <h3>Calculadora Simples</h3>
+        <h3 style={cssTitulo}>Calculadora Simples</h3>
         {Tela(valorTela, resultado)}
         <div style={cssBotoes}>
           {btn('AC', limparMemoria)}
