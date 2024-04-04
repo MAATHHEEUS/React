@@ -7,6 +7,7 @@ var carros = '['+
 
 // Modelo Json
 var obj = JSON.parse(carros);
+
 var http = require('http');
 var server = http.createServer(function(request, response){
   response.setHeader('access-control-allow-origin', '*');

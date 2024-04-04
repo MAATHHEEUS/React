@@ -10,10 +10,10 @@ export default class ListaCarros extends React.Component{
     componentDidMount(){
         // Modelo com uso de axios - necessário instalar 'npm install axios'
         axios.get('https://c1476dc6-a718-411e-ba3d-6510807da63d-00-3ombfqbz0s9v7.riker.replit.dev/')
-            .then(res=>{
-                const dados = res.data;
-                this.setState({carros: dados});
-            });
+        .then(res=>{
+            const dados = res.data;
+            this.setState({carros: dados});
+        });
 
         // Modelo com uso de Fetch 
         // fetch('https://c1476dc6-a718-411e-ba3d-6510807da63d-00-3ombfqbz0s9v7.riker.replit.dev/')
