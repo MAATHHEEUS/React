@@ -11,6 +11,18 @@
         "nome": "Produto 2 xxxxx yyyyyyy zzzzzzzzz",
         "valor": "14,99",
         "imagem": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQils_lNi36_g5x_Jceh0DMhh0IDoYWc_vSZdUUuoiaBg&s"
+      },
+      {
+        "id": 3,
+        "nome": "Produto 3",
+        "valor": "99,99",
+        "imagem": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQils_lNi36_g5x_Jceh0DMhh0IDoYWc_vSZdUUuoiaBg&s"
+      },
+      {
+        "id": 4,
+        "nome": "Produto 4",
+        "valor": "8,99",
+        "imagem": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQils_lNi36_g5x_Jceh0DMhh0IDoYWc_vSZdUUuoiaBg&s"
       }
   ]
   }
