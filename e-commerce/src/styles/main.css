@@ -7,9 +7,8 @@
     font-style: normal;
     display: flex;
     flex-direction: column-reverse;
-    justify-content: center;
-    align-items: center;
     padding: 3.75rem 2.5rem 3.75rem 2.5rem;
+    justify-content: center;
     gap: 4.375rem;
     border-radius: 0.625rem 0rem 0rem 0rem;
     opacity: 0rem;
@@ -21,8 +20,7 @@
     gap: 2.5rem;
     display: flex;
     flex-direction: column;
-    height: 50vh;
-    border: 1px solid red;
+    height: 100vh;
 }
 
 .main__products__titulo {
@@ -46,7 +44,6 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
 }
 
 .main__form__titulo {

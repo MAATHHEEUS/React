@@ -10,7 +10,7 @@ export default function Card(props) {
                 <p className='card__container__name'>{props.nome}</p>
                 <div className="card__container__value">
                     <p>$ {props.preco}</p>
-                    <img src={iconeDelete} alt="Ícone de deletar"/>
+                    <img src={iconeDelete} alt="Ícone de deletar" onClick={props.funcaoClick}/>
                 </div>
             </div>
         </div>

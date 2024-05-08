@@ -3,12 +3,14 @@ import "./App.css";
 import "./styles/reset.css";
 import Header from './components/Header.js';
 import Main from './components/Main.js';
+import Footer from './components/Footer.js';
 
 function App() {
   return (
     <div className="App">
       <Header/>
       <Main/>
+      <Footer/>
       {/* <header>
         <Link to='/'>Home</Link>
         <Link to='/api'>Lista Carros da API</Link>

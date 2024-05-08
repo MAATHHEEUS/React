@@ -13,6 +13,7 @@
     padding: 0.6rem;
     gap: 0.6rem;
     opacity: 0rem;
+    margin-bottom: 2rem;
 }
 
 .card__imagem {
@@ -21,6 +22,7 @@
     border-radius: 0.3rem;
     opacity: 0rem;
     border: 3px solid #000000;
+    background-color: white;
 }
 
 .card__container__info {
@@ -35,6 +37,10 @@
     font-size: 0.9rem;
     line-height: 1.2rem;
     width: 11rem;
+    height: 1.25rem;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 
 .card__container__value {
