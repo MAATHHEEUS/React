@@ -1,0 +1,111 @@
+/* IMPORT FONTS */
+
+@font-face {
+  font-family: 'Inter';
+  src: url("./assets/fonts/Inter-VariableFont_slnt,wght.ttf") format('truetype');
+}
+
+@font-face {
+  font-family: 'MarvelRegular';
+  src: url(./assets/fonts/MarvelRegular-Dj83.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: "Kastelov Black Italic";
+  src: url("./assets/fonts/Kastelov - Axiforma Black Italic.otf") format('opentype');
+}
+
+@font-face {
+  font-family: "Kastelov Black";
+  src: url("./assets/fonts/Kastelov - Axiforma Black.otf") format('opentype');
+}
+
+@font-face {
+  font-family: "Kastelov Bold Italic";
+  src: url("./assets/fonts/Kastelov - Axiforma Bold Italic.otf") format('opentype');
+}
+
+@font-face {
+  font-family: "Kastelov Bold";
+  src: url("./assets/fonts/Kastelov - Axiforma Bold.otf") format('opentype');
+}
+
+@font-face {
+  font-family: "Kastelov Book Italic";
+  src: url("./assets/fonts/Kastelov - Axiforma Book Italic.otf") format('opentype');
+}
+
+@font-face {
+  font-family: "Kastelov Book";
+  src: url("./assets/fonts/Kastelov - Axiforma Book.otf") format('opentype');
+}
+
+@font-face {
+  font-family: "Kastelov ExtraBold Italic";
+  src: url("./assets/fonts/Kastelov - Axiforma ExtraBold Italic.otf") format('opentype');
+}
+
+@font-face {
+  font-family: "Kastelov ExtraBold";
+  src: url("./assets/fonts/Kastelov - Axiforma ExtraBold.otf") format('opentype');
+}
+
+@font-face {
+  font-family: "Kastelov Heavy Italic";
+  src: url("./assets/fonts/Kastelov - Axiforma Heavy Italic.otf") format('opentype');
+}
+
+@font-face {
+  font-family: "Kastelov Heavy";
+  src: url("./assets/fonts/Kastelov - Axiforma Heavy.otf") format('opentype');
+}
+
+@font-face {
+  font-family: 'Kastelov Italic';
+  src: url("./assets/fonts/Kastelov - Axiforma Italic.otf") format('opentype');
+}
+
+@font-face {
+  font-family: "Kastelov Light Italic";
+  src: url("./assets/fonts/Kastelov - Axiforma Light Italic.otf") format('opentype');
+}
+
+@font-face {
+  font-family: "Kastelov Light";
+  src: url("./assets/fonts/Kastelov - Axiforma Light.otf") format('opentype');
+}
+
+@font-face {
+  font-family: "Kastelov Medium Italic";
+  src: url("./assets/fonts/Kastelov - Axiforma Medium Italic.otf") format('opentype');
+}
+
+@font-face {
+  font-family: "Kastelov Medium";
+  src: url("./assets/fonts/Kastelov - Axiforma Medium.otf") format('opentype');
+}
+
+@font-face {
+  font-family: "Kastelov Regular";
+  src: url("./assets/fonts/Kastelov - Axiforma Regular.otf") format('opentype');
+}
+
+@font-face {
+  font-family: "Kastelov SemiBold Italic";
+  src: url("./assets/fonts/Kastelov - Axiforma SemiBold Italic.otf") format('opentype');
+}
+
+@font-face {
+  font-family: "Kastelov SemiBold";
+  src: url("./assets/fonts/Kastelov - Axiforma SemiBold.otf") format('opentype');
+}
+
+@font-face {
+  font-family: "Kastelov Thin Italic";
+  src: url("./assets/fonts/Kastelov - Axiforma Thin Italic.otf") format('opentype');
+}
+
+@font-face {
+  font-family: "Kastelov Thin";
+  src: url("./assets/fonts/Kastelov - Axiforma Thin.otf") format('opentype');
+}

@@ -1,0 +1,50 @@
+# React + TypeScript
+
+# Desafio Front-end 👩‍💻
+
+### Antes de mais nada, gostaria de agradecer pela oportunida de integrar à equipe! Abaixo estão as informações sobre o projeto desenvolvido por mim.
+
+### Sobre mim 🚀
+Desde 2009 vivemos como loucos atrás de mentes apaixonadas por tecnologia, aqueles que nunca ficam contentes com o que sabem, eles sempre querem mais. Somos Beta porque nunca chegamos onde queremos e nunca sabemos o bastante, o conhecimento é nosso alimento, comemos todos os dias.
+
+### Sobre o ambiente de trabalho ☕
+Atualmente contamos com mais de 35 desenvolvedores entre juniors, plenos, mobile, front end e back end. Temos a cultura forte de compartilhar conhecimento, ajudar e incentivar a nossa equipe, além de contar piadas sem graças e mandar memes no Discord.
+
+### Descrição 📰
+Para iniciar o desenvolvimento do teste, baixe o XD do design.
+
+
+### Arquivos
+- [Design](https://drive.google.com/file/d/1-sGLbiaqb_EIskfje4uJzsxSSxLW-wbe/view?usp=sharing) 
+- [Fontes](https://drive.google.com/file/d/1J0ZGvaQczX68yFLDnp9Ma0O2xmneh8Bb/view?usp=sharing)
+- [Fontes 2](https://drive.google.com/file/d/1SCIvJoXnRljB_5lfAH_snHnF8ohQNuOr/view?usp=sharing)
+
+### Requisitos Técnicos 😁
+- ReactJS  ou nest.JS✔
+- TypeScript ✔
+- Estilização com Styled Components ✔
+- Responsividade ✔
+- Organização do projeto ✔
+- Código limpo ✔
+- Documentação do projeto ✔
+
+### Requisitos comportamentais
+- Aprendizado continuo;
+- Interesse por compartilhar experiências;
+- Comunicação;
+- Visão sistêmica.
+
+### Diferenciais 💖
+- Local storage.
+
+### Próximos passos
+1. Enviar o link do repositório para: fabio@mestresdaweb.com.br;
+2. Caso o código analisado passe pelo nosso review, entraremos em contato para uma segunda entrevista.
+
+![Alt Text](https://tenor.com/view/ednaldo-pereira-vale-nada-clone-worthless-funny-gif-17809469.gif)
+
+Now run:
+
+  into Marvel
+  npm install
+  npm run dev

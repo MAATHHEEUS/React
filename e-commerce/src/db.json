@@ -7,22 +7,16 @@
       "imagem": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQils_lNi36_g5x_Jceh0DMhh0IDoYWc_vSZdUUuoiaBg&s"
     },
     {
-      "id": "3",
-      "nome": "Produto 3",
-      "valor": "99,99",
-      "imagem": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQils_lNi36_g5x_Jceh0DMhh0IDoYWc_vSZdUUuoiaBg&s"
-    },
-    {
-      "id": "4",
-      "nome": "Produto 4",
-      "valor": "8,99",
-      "imagem": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQils_lNi36_g5x_Jceh0DMhh0IDoYWc_vSZdUUuoiaBg&s"
-    },
-    {
       "id": "461c",
       "nome": "Produto teste",
       "valor": "9,99",
       "imagem": "https://www.vejalimpeza.com.br/produtos/_jcr_content/root/lowerContentArea/table/header6.coreimg.png/1629750081779/imagem-produto-veja-banheiro-antibac-trigger-500ml.png"
+    },
+    {
+      "id": "995d",
+      "nome": "Produto Novo",
+      "valor": "7,00",
+      "imagem": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQils_lNi36_g5x_Jceh0DMhh0IDoYWc_vSZdUUuoiaBg&s"
     }
   ]
 }
