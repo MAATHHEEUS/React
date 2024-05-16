@@ -1,10 +1,22 @@
 import styled from "styled-components";
 
 export const LoginContainer = styled.div`
-  display: flex;
+  margin-left: 100px;
+  display: none;
   flex-direction: column;
   justify-content: center;
   margin-top: 3rem;
+  animation: animatedHomeLogin 2s linear;
+
+  @keyframes animatedHomeLogin {
+  
+    from {
+      transform: translateY(500px);
+    }
+    to {
+      transform: translateY(0px);
+    }
+  }
 `;
 
 export const LoginBoasVindas = styled.h1`
@@ -88,7 +100,7 @@ export const LoginButton = styled.button`
   border: none;
 `;
 
-export const NotLoginSpan = styled.a`
+export const NotLoginSpan = styled.p`
   color: #84848D;
   font-family: Inter;
   font-size: 1rem;
@@ -104,5 +116,5 @@ export const LoginLinkCadastrar = styled.a`
   font-weight: 400;
   line-height: 1.2rem;
   text-align: left;
-
+  text-decoration: none;
 `;

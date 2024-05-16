@@ -17,6 +17,12 @@
       "nome": "Produto Novo",
       "valor": "7,00",
       "imagem": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQils_lNi36_g5x_Jceh0DMhh0IDoYWc_vSZdUUuoiaBg&s"
+    },
+    {
+      "id": "4597",
+      "nome": "Produto",
+      "valor": "6,80",
+      "imagem": "https://www.vejalimpeza.com.br/produtos/_jcr_content/root/lowerContentArea/table/header6.coreimg.png/1629750081779/imagem-produto-veja-banheiro-antibac-trigger-500ml.png"
     }
   ]
 }
