@@ -9,7 +9,7 @@ export const BackGround = styled.div`
   height: 100vh;
 `;
 
-export const Image = styled.div`
+export const ImageAnimated = styled.div`
   background-image: linear-gradient(to right, transparent, #000000), url(${Capa});
   background-repeat: no-repeat;
   background-position-x: right;
@@ -26,4 +26,12 @@ export const Image = styled.div`
       transform: translateX(0);
     }
   }
+`;
+
+export const Image = styled.div`
+  background-image: linear-gradient(to right, transparent, #000000), url(${Capa});
+  background-repeat: no-repeat;
+  background-position-x: right;
+  height: 100vh;
+  width: 100%;
 `;

@@ -55,6 +55,12 @@ export const LoginInput = styled.input`
   margin-bottom: 1rem;
 `;
 
+export const LoginMsg = styled.p`
+  color: #FF0000;
+  display: none;
+  padding: 1rem;
+`;
+
 export const CheckBox = styled.input.attrs({type: 'checkbox'})`
   width: 0.8rem;
   height: 0.9rem;
@@ -98,6 +104,7 @@ export const LoginButton = styled.button`
   text-align: center;
   color: #FFFFFF;
   border: none;
+  cursor: pointer;
 `;
 
 export const NotLoginSpan = styled.p`

@@ -14,8 +14,6 @@ export const Title = styled.div`
   animation: animatedHomeTitle, animatedHomeTitleAfter;
   animation-duration: 3s, 3s; 
   animation-delay: 0s, 3s;
-  animation-direction: normal, alternate;
-  animation-iteration-count: 1, 2;
   margin-left: 200px;
 
   @keyframes animatedHomeTitle {
