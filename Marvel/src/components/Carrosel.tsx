@@ -1,14 +1,13 @@
 import styled from "styled-components";
 
 export const Carrosel = styled.div`
-    border: 1px solid red; 
     position: fixed;
     padding: 6rem 0rem 5.25rem 8rem;
-    max-width: 100%;
+    max-width: 80%;
     height: 80%;
     margin: 0 auto;
     top: 7.1rem;
-    opacity: 80%;
+    opacity: 90%;
     background: rgb(0,0,0);
     background: linear-gradient(90deg, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 28%, rgba(21,22,22,1) 52%);
 `;
@@ -16,23 +15,18 @@ export const Carrosel = styled.div`
 export const Controle = styled.button`
     position: absolute;
     top: 0;
-    right: 0;
+    right: -3.1rem;
     left: auto;
     text-align: right;
-    background: linear-gradient(to right, transparent 0%, black 200%);
-    bottom: 0;
-    font-size: 20px;
-    line-height: 250px;
-    width: 40px;
+    background: transparent;
+    bottom: 6.25rem;
+    font-size: 1.25rem;
+    line-height: 15.6rem;
+    width: 2.5rem;
     color: #fff;
     transition: all 600ms ease-in-out;
-    opacity: 0.1;
     cursor: pointer;
     border: none;
-
-    :hover {
-        opacity: 1;
-    }
 `;
 
 export const Container = styled.div`
@@ -50,18 +44,12 @@ export const Container = styled.div`
 export const Galeria = styled.div`
     display: flex;
     flex-flow: row nowrap;
-    gap: 15px;
+    gap: 5rem;
 `;
 
 export const Item = styled.div`
     color: #FFFFFF;
-    // width: 250px;
-    // height: 250px;
     flex-shrink: 0;
     transition: all 600ms ease-in-out;
-    // opacity: 0.5;
-
-    .current-item {
-        opacity: 1;
-    }
+    opacity: 0.7;
 `;

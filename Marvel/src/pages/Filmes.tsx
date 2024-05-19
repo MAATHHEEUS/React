@@ -4,7 +4,7 @@ export default function Filmes() {
 
     return (
         <>
-            Filmes
+            <p>Filmes</p>
         </>
     );
 }

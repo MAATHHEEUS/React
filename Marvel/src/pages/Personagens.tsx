@@ -4,6 +4,7 @@ import { NavBar, Logo, Link, Perfil, Foto } from '../components/NavBar';
 import { Carrosel, Controle, Container, Galeria, Item } from '../components/Carrosel';
 import { JSX } from 'react/jsx-runtime';
 import Card from '../components/Card';
+import Modal from '../components/Modal';
 import Seta from '../assets/imgs/Icon-awesome-arrow-right.png';
 import Spider from '../assets/imgs/spider.png';
 import Wanda from '../assets/imgs/wanda.png';
@@ -21,6 +22,8 @@ export default function App() {
     )
     const [url, setUrl] = useState(window.location.href.toString().replace("Personagens", ""));
     const [currentItem, setCurrentItem] = useState(0);
+    const [visible, setVisible] = useState(false);
+
 
     // FUNCOES
     const ScroolCarrosel = (e: any) => {
@@ -46,6 +49,7 @@ export default function App() {
         }
 
         items.forEach((item) => item.classList.remove("current-item"));
+        items.forEach((item) => item.style.opacity = '0.6');
 
         if (currentItem < maxItems) {
             items[currentItem].scrollIntoView({
@@ -54,14 +58,19 @@ export default function App() {
             });
 
             items[currentItem].classList.add("current-item");
+            items[currentItem].style.opacity = '1';
         }
     }
+
+    const toggleModal = () => {
+        setVisible(!visible);
+    };
 
     const montaItens = () => {
         const itens: JSX.Element[] = [];
         personagens.forEach((item) => {
-            itens.push(<Item  id={"Item"+item.id} className="item current-item">
-                <Card  id={"Card"+item.id} Imagem={item.imagem} Titulo={item.titulo} Descricao={item.descricao}></Card>
+            itens.push(<Item key={item.id} id={"Item"+item.id} className="item current-item">
+                <Card key={item.id} id={"Card"+item.id} Imagem={item.imagem} Titulo={item.titulo} Descricao={item.descricao} onClick={toggleModal}></Card>
             </Item>);
         })
         return <>{itens}</>
@@ -95,6 +104,16 @@ export default function App() {
         }
     ];
 
+    const modal = document.getElementById('modal');
+
+    if (visible) {
+        if(modal){
+            modal.style.display = 'flex';
+        } 
+    } else {
+        if(modal) modal.style.display = 'none';
+    }
+
     return (
         <>
             <BackGround>
@@ -118,6 +137,7 @@ export default function App() {
                         </Galeria>
                     </Container>
                 </Carrosel>
+                <Modal Visible={visible} toggleModal={toggleModal} imagem={Wanda}/>
                 <Image></Image>
             </BackGround>
         </>

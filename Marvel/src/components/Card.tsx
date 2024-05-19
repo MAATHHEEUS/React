@@ -52,7 +52,7 @@ export default function Card(props : any) {
             <Conteudo>
                 <Titulo>{props.Titulo}</Titulo>
                 <Descricao>{props.Descricao}</Descricao>
-                <Detalhes>ver detalhes</Detalhes>
+                <Detalhes onClick={props.onClick}>ver detalhes</Detalhes>
             </Conteudo>
         </Imagem>
     );
