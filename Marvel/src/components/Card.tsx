@@ -52,7 +52,7 @@ export default function Card(props : any) {
             <Conteudo>
                 <Titulo>{props.Titulo}</Titulo>
                 <Descricao>{props.Descricao}</Descricao>
-                <Detalhes onClick={props.onClick}>ver detalhes</Detalhes>
+                <Detalhes id={`personagem${props.id}`} onClick={(e) => props.onClick(e)}>ver detalhes</Detalhes>
             </Conteudo>
         </Imagem>
     );

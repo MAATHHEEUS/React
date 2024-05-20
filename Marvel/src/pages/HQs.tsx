@@ -4,25 +4,22 @@ import { NavBar, Logo, Link, Perfil, Foto } from '../components/NavBar';
 import { Carrosel, Controle, Container, Galeria, Item } from '../components/Carrosel';
 import { JSX } from 'react/jsx-runtime';
 import Card from '../components/Card';
-import Filtro from '../components/Filtro';
-import Modal from '../components/ModalFilme';
+import Modal from '../components/ModalHQs';
 import Seta from '../assets/imgs/Icon-awesome-arrow-right.png';
-import Ferro from '../assets/imgs/iron-man.png';
-import Ferro2 from '../assets/imgs/iron-man2.png';
-import Thor from '../assets/imgs/thor.png';
-import Capitao from '../assets/imgs/capitan.png';
-import Marvel from '../assets/imgs/marvel.png';
+import Surfista from '../assets/imgs/surfista-hq.png';
+import Wolverine from '../assets/imgs/wv-hq.png';
+import Thor from '../assets/imgs/thor-hq.png';
 
-export default function Filmes() {
+export default function HQs() {
 
     // HOOKS
     useEffect(
         () => {
-            const linkAtual = document.getElementById('link__filmes');
+            const linkAtual = document.getElementById('link__HQs');
             if (linkAtual) linkAtual.style.opacity = '100%';
         }
     )
-    const [url, setUrl] = useState(window.location.href.toString().replace("Filmes", ""));
+    const [url, setUrl] = useState(window.location.href.toString().replace("HQs", ""));
     const [currentItem, setCurrentItem] = useState(0);
     const [visible, setVisible] = useState(false);
     const [personagem, setPersonagem] = useState("");
@@ -84,33 +81,21 @@ export default function Filmes() {
     var personagens = [
         {
             "id": 1,
-            "titulo": "Capitão América",
-            "descricao": "Em Capitão América: O Primeiro Vingador, conhecemos a história de Steve Rogers (Chris Evans) e como ele se tornou o melhor soldado do mundo.",
-            "imagem": Capitao
+            "titulo": "Thor: Vikings",
+            "descricao": "Garth Ennis e sua violência atacam novamente na HQ que leva a violência das histórias de Thor ao limite! Na minissérie de 2003 vemos vikings de um passado distante voltando a vida.",
+            "imagem": Thor
         },
         {
             "id": 2,
-            "titulo": "Capitã Marvel",
-            "descricao": "Capitã Marvel, parte do exército de elite dos Kree, uma raça alienígena, encontra-se no meio de uma batalha entre seu povo e os Skrulls. ",
-            "imagem": Marvel
+            "titulo": "Surfista Prateado: Parábola",
+            "descricao": "O único oponente do Devorador de Mundos é o herói que ele aprisionou na Terra: o Surfista Prateado, Galactus jurou não consumir o planeta, mas e se, em vez disso, ele transformar a civilização em seus adoradores?",
+            "imagem": Surfista
         },
         {
             "id": 3,
-            "titulo": "Homem de Ferro",
-            "descricao": "Tony Stark (Robert Downey Jr.) é um industrial bilionário, que também é um brilhante inventor, ao ser sequestrado, ele é obrigado a construir uma arma devastadora, mas ao invés disso, cria uma armadura capaz de mudar a história.",
-            "imagem": Ferro
-        },
-        {
-            "id": 4,
-            "titulo": "Homem de Ferro 2",
-            "descricao": "O mundo já sabe que o inventor bilionário Tony Stark (Robert Downey Jr.) é o super-herói blindado Homem de Ferro. Sofrendo pressão do governo, da mídia e do público para compartilhar sua tecnologia com as forças armadas",
-            "imagem": Ferro2
-        },
-        {
-            "id": 5,
-            "titulo": "Thor",
-            "descricao": "Quando é banido do reino de Asgard e exilado na Terra, o arrogante guerreiro Thor (Chris Hemsworth) é obrigado a lutar para reaver seus poderes perdidos. ",
-            "imagem": Thor
+            "titulo": "Wolverine: Origens",
+            "descricao": "Origem é uma minissérie em quadrinhos publicada pela Marvel Comics em seis edições, entre 2001 e 2002. A história conta a revelação do passado do personagem Wolverine. ",
+            "imagem": Wolverine
         }
     ];
 
@@ -130,15 +115,14 @@ export default function Filmes() {
                 <NavBar>
                     <Logo>Marvel</Logo>
                     <Link id='link__personagens' href={`${url}Personagens`}>Personagens</Link>
-                    <Link id='link__filmes' href='#'>Filmes</Link>
-                    <Link id='link__HQs' href={`${url}HQs`}>HQs</Link>
+                    <Link id='link__filmes' href={`${url}Filmes`}>Filmes</Link>
+                    <Link id='link__HQs' href='#'>HQs</Link>
                     <Perfil>
                         <Foto></Foto>
                         <Link href={`${url}`}>Sair</Link>
                     </Perfil>
                 </NavBar>
                 <Carrosel>
-                    <Filtro></Filtro>
                     <Controle aria-label='Próxima imagem' onClick={(e) => ScroolCarrosel(e)}>
                         <img src={Seta} alt='Seta para direita' />
                     </Controle>

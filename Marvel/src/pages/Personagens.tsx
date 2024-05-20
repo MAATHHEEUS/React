@@ -4,14 +4,14 @@ import { NavBar, Logo, Link, Perfil, Foto } from '../components/NavBar';
 import { Carrosel, Controle, Container, Galeria, Item } from '../components/Carrosel';
 import { JSX } from 'react/jsx-runtime';
 import Card from '../components/Card';
-import Modal from '../components/Modal';
+import Modal from '../components/ModalPersonagem';
 import Seta from '../assets/imgs/Icon-awesome-arrow-right.png';
 import Spider from '../assets/imgs/spider.png';
 import Wanda from '../assets/imgs/wanda.png';
 import Thanos from '../assets/imgs/thanos.png';
 import Hulk from '../assets/imgs/hulk.png';
 
-export default function App() {
+export default function Personagens() {
 
     // HOOKS
     useEffect(
@@ -23,6 +23,7 @@ export default function App() {
     const [url, setUrl] = useState(window.location.href.toString().replace("Personagens", ""));
     const [currentItem, setCurrentItem] = useState(0);
     const [visible, setVisible] = useState(false);
+    const [personagem, setPersonagem] = useState("");
 
 
     // FUNCOES
@@ -62,7 +63,8 @@ export default function App() {
         }
     }
 
-    const toggleModal = () => {
+    const toggleModal = (e : any ) => {
+        setPersonagem(e.target.id.toString());
         setVisible(!visible);
     };
 
@@ -120,8 +122,8 @@ export default function App() {
                 <NavBar>
                     <Logo>Marvel</Logo>
                     <Link id='link__personagens' href='#'>Personagens</Link>
-                    <Link href={`${url}Filmes`}>Filmes</Link>
-                    <Link href={`${url}HQs`}>HQs</Link>
+                    <Link id='link__filmes' href={`${url}Filmes`}>Filmes</Link>
+                    <Link id='link__HQs' href={`${url}HQs`}>HQs</Link>
                     <Perfil>
                         <Foto></Foto>
                         <Link href={`${url}`}>Sair</Link>
@@ -137,7 +139,7 @@ export default function App() {
                         </Galeria>
                     </Container>
                 </Carrosel>
-                <Modal Visible={visible} toggleModal={toggleModal} imagem={Wanda}/>
+                <Modal Visible={visible} toggleModal={toggleModal} Personagem={personagem}/>
                 <Image></Image>
             </BackGround>
         </>
