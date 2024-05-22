@@ -5,5 +5,5 @@ export const BackGround = styled.div`
   justify-content: center;
   align-items: center;
   background-color: #DDDDDD;
-  height: 100vh;
+  // height: 100vh;
 `;

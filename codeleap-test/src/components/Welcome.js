@@ -69,12 +69,14 @@ export default function Welcome(props) {
         () => {
             const botao = document.getElementById('botao__entrar');
             if (botao) {
-                if (userName != '' && userName.length >= 3) {
+                if (userName.trim() != '' && userName.trim().length >= 3) {
                     botao.style.backgroundColor = '#000000';
                     botao.style.pointerEvents = '';
+                    botao.setAttribute('tabIndex', 'default');
                 }else{
                     botao.style.backgroundColor = '#CCCCCC';
                     botao.style.pointerEvents = 'none';
+                    botao.setAttribute('tabIndex', '-1');
                 }
             }
         }
@@ -85,7 +87,7 @@ export default function Welcome(props) {
             <Title>Welcome to CodeLeap network!</Title>
             <Label>Please enter your username</Label>
             <Input placeholder='Matheus Carvalho' type='text' name='username' minLength={3} maxLength={100} value={userName} onChange={(e) => { setUserName(e.target.value) }}></Input>
-            <Enter id="botao__entrar" href={props.url} onClick={() => localStorage.setItem("userName", userName)}>Enter</Enter>
+            <Enter id="botao__entrar" href={props.url} onClick={() => localStorage.setItem("userName", userName)} tabIndex={-1}>Enter</Enter>
         </Container>
     );
 }

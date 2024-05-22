@@ -1,4 +1,6 @@
 import styled from 'styled-components';
+import CreatePost from './CreatePost';
+import Post from './Post';
 
 const Container = styled.div`
     display: flex;
@@ -9,7 +11,7 @@ const Container = styled.div`
     color: #FFFFFF;
     font-family: Roboto;
     width: 50%;
-    height: 100vh;
+    min-height: 100vh;
 `;
 
 const Title = styled.h1`
@@ -28,6 +30,8 @@ export default function Network() {
     return(
         <Container>
             <Title>CodeLeap Network</Title>
+            <CreatePost></CreatePost>
+            <Post></Post>
         </Container>
     );   
 }
