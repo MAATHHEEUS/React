@@ -2,15 +2,19 @@ import { useState, useEffect } from "react";
 import styled from 'styled-components';
 
 const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: start;
-  background-color: #FFFFFF;
-  color: #000000;
-  font-family: Roboto;
-  border: 1px solid #CCCCCC;
-  padding: 1.8rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: start;
+    background-color: #FFFFFF;
+    color: #000000;
+    font-family: Roboto;
+    border: 1px solid #CCCCCC;
+    padding: 0.8rem;
+
+    @media only screen and (min-width: 430px){
+        padding: 1.8rem;
+    }
 `;
 
 const Title = styled.h1`
@@ -36,7 +40,7 @@ const Input = styled.input`
     margin-bottom: 1.3rem;
     border-radius: 4px;
     padding: 0.37rem;
-    width: 15.75rem;
+    width: auto;
 
     @media only screen and (min-width: 430px){
         width: 20.75rem;

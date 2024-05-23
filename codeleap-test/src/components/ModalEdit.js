@@ -1,6 +1,20 @@
 import { useState, useEffect } from "react";
 import styled from 'styled-components';
 
+const Modal = styled.div`
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    display: none;
+    background: rgba(49,49,49,0.8);
+`;
+
 const Container = styled.div`
     display: flex;
     flex-direction: column;
@@ -12,11 +26,11 @@ const Container = styled.div`
     border: 1px solid #CCCCCC;
     padding: 1.8rem;
     margin: 1rem 2.3rem;
-    width: 80%;
+    width: 65%;
     box-sizing: border-box;
 
     @media only screen and (min-width: 768px){
-        width: 90%;
+        width: 45%;
     }
 `;
 
@@ -70,25 +84,21 @@ const TextArea = styled.textarea`
     resize: none;
 `;
 
-const Create = styled.a`
+const Save = styled.a`
     background-color: #CCCCCC;
     color: #FFFFFF;
     font-size: 1.3rem;
     font-weight: 700;
     line-height: 1.6rem;
     text-transform: uppercase;
-    align-self: center;
+    align-self: end;
     border: none;
     padding: 0.4rem 1.8rem;
     text-decoration: none;
     margin-top: 1rem;
-
-    @media only screen and (min-width: 468px){
-        align-self: flex-end;
-    }
 `;
 
-export default function CreatePost() {
+export default function ModalEdit() {
 
     // HOOKS
     const [title, setTitle] = useState('');
@@ -96,7 +106,7 @@ export default function CreatePost() {
 
     useEffect(
         () => {
-            const botao = document.getElementById('botao__criar');
+            const botao = document.getElementById('botao__salvar');
             if (botao) {
                 if ((title.trim() != '' && title.trim().length >= 3) && (content.trim() != '' && content.trim().length >= 3)) {
                     botao.style.backgroundColor = '#000000';
@@ -112,24 +122,20 @@ export default function CreatePost() {
     )
 
     // FUNCOES
-    const CreatePost = async (e) => {
+    const SavePost = async (e, id) => {
         e.preventDefault();
-        
-        // const title = document.getElementById("descricao").value;
-        // const content = document.getElementById("valor").value;
-
         try {
-            await salvaDados(title, content);
-            alert('Post criado com sucesso.');
+            await salvaDados(title, content, id);
+            alert('Post salvo com sucesso.');
             window.location.reload();
         } catch (error) {
             alert(error);
         }
     }
 
-    async function salvaDados(titulo, conteudo) {
-        const conexao = await fetch("http://localhost:4000/produtos", {
-            method: "POST",
+    async function salvaDados(titulo, conteudo, id) {
+        const conexao = await fetch(`http://localhost:4000/produtos/${id}`, {
+            method: "PUT",
             headers: {
                 "Content-type": "application/json"
             },
@@ -142,17 +148,19 @@ export default function CreatePost() {
     }
 
     return (
-        <Container>
-            <Texto>What’s on your mind?</Texto>
-            <InputGroup>
-                <Label>Title</Label>
-                <Input type="text" placeholder="Hello world" name='title' minLength={3} maxLength={100} value={title} onChange={(e) => { setTitle(e.target.value) }}></Input>
-            </InputGroup>
-            <InputGroup>
-                <Label>Content</Label>
-                <TextArea placeholder="Content here" rows={4} name='content' minLength={3} maxLength={255} value={content} onChange={(e) => { setContent(e.target.value) }}></TextArea>
-            </InputGroup>
-            <Create id="botao__criar" href={''} onClick={(e) => CreatePost(e)} tabIndex={-1}>Create</Create>
-        </Container>
+        <Modal>
+            <Container>
+                <Texto>Edit item</Texto>
+                <InputGroup>
+                    <Label>Title</Label>
+                    <Input type="text" placeholder="Hello world" name='title' minLength={3} maxLength={100} value={title} onChange={(e) => { setTitle(e.target.value) }}></Input>
+                </InputGroup>
+                <InputGroup>
+                    <Label>Content</Label>
+                    <TextArea placeholder="Content here" rows={4} name='content' minLength={3} maxLength={255} value={content} onChange={(e) => { setContent(e.target.value) }}></TextArea>
+                </InputGroup>
+                <Save id="botao__salvar" href={''} onClick={(e) => SavePost(e)} tabIndex={-1}>Save</Save>
+            </Container>
+        </Modal>
     );
 }
