@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import styled from 'styled-components';
 import Delete from '../imgs/delete-forever.png';
 import Editar from '../imgs/bx-edit.png';
@@ -88,25 +87,46 @@ const Content = styled.p`
     margin: 0rem 1.8rem 1rem 1.8rem;
 `;
 
-export default function Post() {
+export default function Post(props) {
 
-    // HOOKS
+    // FUNCOES
+    const montaHora = (date) => {
+        const atual = new Date();
+        const convert = new Date(date.toString());
+        let retorno = diffDates(atual, convert);
+        return <p>{retorno}</p>
+    }
+
+    const diffDates = (final, inicial) => {
+        // Dias
+        if(parseInt((final - inicial) / 86_400_000) > 0){
+            return `${parseInt((final - inicial) / 86_400_000)} days ago`;
+        }
+        else if(parseInt((final - inicial) / 3_600_000) > 0){ // Horas
+            return `${parseInt((final - inicial) / 3_600_000)} hours ago`;
+        }
+        else{
+            if(parseInt((final - inicial) / 60_000) > 0){
+                return `${parseInt((final - inicial) / 60_000)} minutes ago`;
+            }else{
+                return `${1} minute ago`;
+            }
+        }
+    }
 
     return (
         <Container>
-            <Title>My First Post at CodeLeap Network!
-                <Icons>
-                    <img src={Delete} alt="Delete Icon" onClick={() => alert('Delete')}/>
-                    <img src={Editar} alt="Edit Icon" onClick={() => alert('Edit')}/>
+            <Title>{props.Title}
+                <Icons style={{ display: localStorage.getItem('userName') == props.User ? 'flex' : 'none' }}>
+                    <img src={Delete} alt="Delete Icon" onClick={() => alert('Delete')} />
+                    <img src={Editar} alt="Edit Icon" onClick={() => alert('Edit')} />
                 </Icons>
             </Title>
             <Dados>
-                <p>@User</p> 
-                <p>25 minutes ago</p>
+                <p>@{props.User}</p>
+                {montaHora(props.Date)}
             </Dados>
-            <Content>Curabitur suscipit suscipit tellus. Phasellus consectetuer vestibulum elit. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Maecenas egestas arcu quis ligula mattis placerat. Duis vel nibh at velit scelerisque suscipit.
-
-Duis lobortis massa imperdiet quam. Aenean posuere, tortor sed cursus feugiat, nunc augue blandit nunc, eu sollicitudin urna dolor sagittis lacus. Fusce a quam. Nullam vel sem. Nullam cursus lacinia erat.</Content>
+            <Content>{props.Content}</Content>
         </Container>
     );
 }

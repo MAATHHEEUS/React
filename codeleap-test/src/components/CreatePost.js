@@ -112,14 +112,11 @@ export default function CreatePost() {
     )
 
     // FUNCOES
-    const CreatePost = async (e) => {
+    const CreatePost = async (e, user) => {
         e.preventDefault();
-        
-        // const title = document.getElementById("descricao").value;
-        // const content = document.getElementById("valor").value;
 
         try {
-            await salvaDados(title, content);
+            await salvaDados(user, title, content);
             alert('Post criado com sucesso.');
             window.location.reload();
         } catch (error) {
@@ -127,13 +124,14 @@ export default function CreatePost() {
         }
     }
 
-    async function salvaDados(titulo, conteudo) {
+    async function salvaDados(usuario, titulo, conteudo) {
         const conexao = await fetch("http://localhost:4000/produtos", {
             method: "POST",
             headers: {
                 "Content-type": "application/json"
             },
             body: JSON.stringify({
+                username: usuario,
                 title: titulo,
                 content: conteudo
             })

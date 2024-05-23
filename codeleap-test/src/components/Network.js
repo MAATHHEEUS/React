@@ -42,13 +42,13 @@ export default function Network() {
     useEffect(() => {
         async function getPosts() {
             try {
-                const conexao = await fetch("http://127.0.0.1:8000/posts/");
+                const conexao = await fetch("https://dev.codeleap.co.uk/careers/");
                 if (!conexao.ok) throw new Error("Não foi possível acessar API com os posts.");
                 else {
                     const conexaoConvertida = conexao.json();
                     conexaoConvertida.then(res => {
-                        setPosts(res);
-                        console.log(res);
+                        setPosts(res.results);
+                        console.log(res.results);
                     });
                 }
             } catch (error) {
@@ -58,14 +58,28 @@ export default function Network() {
         getPosts();
     }, []);
 
-    return(
+    // FUNCOES
+    const montaPosts = () => {
+        if (posts.length == 0) {
+            return <Post Title="Any post created yet" User="User" Content="Content here!" Id="0" Date="2024-05-23T14:32:29.445380Z"></Post>
+        } else {
+            return <>
+                {
+                    posts.map(
+                        post => <Post key={post.id} Id={post.id} User={post.username} Title={post.title} Date={post.created_datetime} Content={post.content}/>
+                    )
+                }
+            </>
+        }
+    }
+
+    return (
         <Container>
             <Title>CodeLeap Network</Title>
             <CreatePost></CreatePost>
-            <Post></Post>
-            <Post></Post>
+            {montaPosts()}
             <ModalEdit></ModalEdit>
             <ModalDelete></ModalDelete>
         </Container>
-    );   
+    );
 }
