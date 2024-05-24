@@ -112,8 +112,9 @@ export default function CreatePost() {
     )
 
     // FUNCOES
-    const CreatePost = async (e, user) => {
+    const CreatePost = async (e) => {
         e.preventDefault();
+        const user = localStorage.getItem('userName');
 
         try {
             await salvaDados(user, title, content);
@@ -125,7 +126,7 @@ export default function CreatePost() {
     }
 
     async function salvaDados(usuario, titulo, conteudo) {
-        const conexao = await fetch("http://localhost:4000/produtos", {
+        const conexao = await fetch("https://dev.codeleap.co.uk/careers/", {
             method: "POST",
             headers: {
                 "Content-type": "application/json"

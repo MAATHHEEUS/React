@@ -1,6 +1,9 @@
 import styled from 'styled-components';
 import Delete from '../imgs/delete-forever.png';
 import Editar from '../imgs/bx-edit.png';
+import ModalEdit from './ModalEdit';
+import ModalDelete from './ModalDelete';
+import { useState } from 'react';
 
 const Container = styled.div`
     display: flex;
@@ -89,6 +92,10 @@ const Content = styled.p`
 
 export default function Post(props) {
 
+    // HOOKS
+    const [visibleEdit, setVisibleEdit] = useState(false);
+    const [visibleDelete, setVisibleDelete] = useState(false);
+
     // FUNCOES
     const montaHora = (date) => {
         const atual = new Date();
@@ -99,27 +106,57 @@ export default function Post(props) {
 
     const diffDates = (final, inicial) => {
         // Dias
-        if(parseInt((final - inicial) / 86_400_000) > 0){
+        if (parseInt((final - inicial) / 86_400_000) > 0) {
             return `${parseInt((final - inicial) / 86_400_000)} days ago`;
         }
-        else if(parseInt((final - inicial) / 3_600_000) > 0){ // Horas
+        else if (parseInt((final - inicial) / 3_600_000) > 0) { // Horas
             return `${parseInt((final - inicial) / 3_600_000)} hours ago`;
         }
-        else{
-            if(parseInt((final - inicial) / 60_000) > 0){
+        else {
+            if (parseInt((final - inicial) / 60_000) > 0) {
                 return `${parseInt((final - inicial) / 60_000)} minutes ago`;
-            }else{
+            } else {
                 return `${1} minute ago`;
             }
         }
+    }
+
+    // EDIT MODAL
+    const toggleModalEdit = () => {
+        setVisibleEdit(!visibleEdit);
+    };
+
+    const modalEdit = document.getElementById(`modalEdit_${props.Id}`);
+
+    if (visibleEdit) {
+        if (modalEdit) {
+            modalEdit.style.display = 'flex';
+        }
+    } else {
+        if (modalEdit) modalEdit.style.display = 'none';
+    }
+
+    // DELETE MODAL
+    const toggleModalDelete = () => {
+        setVisibleDelete(!visibleDelete);
+    };
+
+    const modalDelete = document.getElementById(`modalDelete_${props.Id}`);
+
+    if (visibleDelete) {
+        if (modalDelete) {
+            modalDelete.style.display = 'flex';
+        }
+    } else {
+        if (modalDelete) modalDelete.style.display = 'none';
     }
 
     return (
         <Container>
             <Title>{props.Title}
                 <Icons style={{ display: localStorage.getItem('userName') == props.User ? 'flex' : 'none' }}>
-                    <img src={Delete} alt="Delete Icon" onClick={() => alert('Delete')} />
-                    <img src={Editar} alt="Edit Icon" onClick={() => alert('Edit')} />
+                    <img src={Delete} alt="Delete Icon" onClick={() => toggleModalDelete()} />
+                    <img src={Editar} alt="Edit Icon" onClick={() => toggleModalEdit()} />
                 </Icons>
             </Title>
             <Dados>
@@ -127,6 +164,8 @@ export default function Post(props) {
                 {montaHora(props.Date)}
             </Dados>
             <Content>{props.Content}</Content>
+            <ModalEdit toggleModal={toggleModalEdit} Post={props.Id} Content={props.Content} Title={props.Title}></ModalEdit>
+            <ModalDelete Post={props.Id} toggleModal={toggleModalDelete}></ModalDelete>
         </Container>
     );
 }

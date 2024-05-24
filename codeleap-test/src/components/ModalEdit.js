@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import styled from 'styled-components';
+import X from '../imgs/x.png'
 
 const Modal = styled.div`
     width: 100vw;
@@ -39,6 +40,9 @@ const Texto = styled.p`
     font-weight: 700;
     line-height: 1.6rem;
     margin-bottom: 2.1rem;
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
 `;
 
 const InputGroup = styled.div`
@@ -98,15 +102,22 @@ const Save = styled.a`
     margin-top: 1rem;
 `;
 
-export default function ModalEdit() {
+const BotaoX = styled.button`
+    align-self: end;
+    display: flex;
+    border: 2px solid #000000;
+    background-color: #000000;
+`;
+
+export default function ModalEdit(props) {
 
     // HOOKS
-    const [title, setTitle] = useState('');
-    const [content, setContent] = useState('');
+    const [title, setTitle] = useState(props.Title ? props.Title : "");
+    const [content, setContent] = useState(props.Content ? props.Content : "");
 
     useEffect(
         () => {
-            const botao = document.getElementById('botao__salvar');
+            const botao = document.getElementById(`botao__salvar_${props.Post}`);
             if (botao) {
                 if ((title.trim() != '' && title.trim().length >= 3) && (content.trim() != '' && content.trim().length >= 3)) {
                     botao.style.backgroundColor = '#000000';
@@ -134,8 +145,8 @@ export default function ModalEdit() {
     }
 
     async function salvaDados(titulo, conteudo, id) {
-        const conexao = await fetch(`http://localhost:4000/produtos/${id}`, {
-            method: "PUT",
+        const conexao = await fetch(`https://dev.codeleap.co.uk/careers/${id}/`, {
+            method: "PATCH",
             headers: {
                 "Content-type": "application/json"
             },
@@ -148,9 +159,13 @@ export default function ModalEdit() {
     }
 
     return (
-        <Modal>
+        <Modal id={`modalEdit_${props.Post}`} >
             <Container>
-                <Texto>Edit item</Texto>
+                
+                <Texto>
+                    Edit item
+                    <BotaoX onClick={props.toggleModal}><img src={X} alt="Botao fechar" /></BotaoX>
+                </Texto>
                 <InputGroup>
                     <Label>Title</Label>
                     <Input type="text" placeholder="Hello world" name='title' minLength={3} maxLength={100} value={title} onChange={(e) => { setTitle(e.target.value) }}></Input>
@@ -159,7 +174,7 @@ export default function ModalEdit() {
                     <Label>Content</Label>
                     <TextArea placeholder="Content here" rows={4} name='content' minLength={3} maxLength={255} value={content} onChange={(e) => { setContent(e.target.value) }}></TextArea>
                 </InputGroup>
-                <Save id="botao__salvar" href={''} onClick={(e) => SavePost(e)} tabIndex={-1}>Save</Save>
+                <Save id={`botao__salvar_${props.Post}`} href={''} onClick={(e) => SavePost(e, props.Post)} tabIndex={-1}>Save</Save>
             </Container>
         </Modal>
     );

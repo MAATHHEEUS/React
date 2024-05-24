@@ -68,13 +68,13 @@ const Botao = styled.button`
     }
 `;
 
-export default function ModalDelete() {
+export default function ModalDelete(props) {
 
     // FUNCOES
     const excluirPost = async (evento, id) => {
         evento.preventDefault();
         try {
-            const conexao = await fetch(`http://localhost:4000/produtos/${id}`, {
+            const conexao = await fetch(`https://dev.codeleap.co.uk/careers/${id}/`, {
                 method: "DELETE",
                 headers: {
                     "Content-type": "application/json"
@@ -91,12 +91,12 @@ export default function ModalDelete() {
     }
 
     return(
-        <Modal>
+        <Modal id={`modalDelete_${props.Post}`}>
             <Container>
                 <Texto>Are you sure you want to delete this item?</Texto>
                 <GrupoBotoes>
-                    <Botao>Cancel</Botao>
-                    <Botao>OK</Botao>
+                    <Botao onClick={props.toggleModal}>Cancel</Botao>
+                    <Botao onClick={(e) => excluirPost(e, props.Post)}>OK</Botao>
                 </GrupoBotoes>
             </Container>
         </Modal>

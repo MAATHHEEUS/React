@@ -2,8 +2,6 @@ import { useState, useEffect } from "react";
 import styled from 'styled-components';
 import CreatePost from './CreatePost';
 import Post from './Post';
-import ModalEdit from './ModalEdit';
-import ModalDelete from './ModalDelete';
 
 const Container = styled.div`
     display: flex;
@@ -66,7 +64,7 @@ export default function Network() {
             return <>
                 {
                     posts.map(
-                        post => <Post key={post.id} Id={post.id} User={post.username} Title={post.title} Date={post.created_datetime} Content={post.content}/>
+                        post => <Post id={post.id} key={post.id} Id={post.id} User={post.username} Title={post.title} Date={post.created_datetime} Content={post.content} />
                     )
                 }
             </>
@@ -78,8 +76,6 @@ export default function Network() {
             <Title>CodeLeap Network</Title>
             <CreatePost></CreatePost>
             {montaPosts()}
-            <ModalEdit></ModalEdit>
-            <ModalDelete></ModalDelete>
         </Container>
     );
 }

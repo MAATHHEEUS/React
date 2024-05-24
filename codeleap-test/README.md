@@ -18,6 +18,10 @@ Amo de paixão a área de desenvolvimento de TI e pretendo manter-me como um pro
 O projeto simula uma página de posts.
 - Na tela inicial/login temos a animação do botão entrar que somente é habilitado se o campo de username for preenchido;
 - Sistema faz validação simples no campo username;
+- Na página de Home temos a caixa de craição de post, onde o botão de "CREATE" segue a mesma animação do botão de "ENTER" na tela inicial;
+- Ao criar um post o sistema cria uma Requisição "POST" para o servidor https://dev.codeleap.co.uk/careers/;
+- Logo abaixo temos os posts criados pelos usuários, com ícones de "DELETE" e "EDIT" caso for o mesmo usuário que está "logado";
+- Os ícones criam requisições "DELETE" e "PATCH" para o mesmo servidor com o id do post clicado;
 
 
 ### Arquivos usados
