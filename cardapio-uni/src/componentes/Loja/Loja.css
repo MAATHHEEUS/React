@@ -1,0 +1,18 @@
+.loja {
+    text-align: center;
+    padding: 1.8rem;
+}
+
+.loja h3 {
+    font-size: 1.8rem;
+    display: inline-block;
+    padding-bottom: 0.5rem;
+    border-bottom: 4px solid;
+}
+
+.loja .produtos {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+}
