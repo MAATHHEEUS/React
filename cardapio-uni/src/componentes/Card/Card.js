@@ -1,4 +1,5 @@
 import './Card.css'
+import { AiFillCloseCircle } from "react-icons/ai";
 
 export default function Card(props) {
 
@@ -8,6 +9,7 @@ export default function Card(props) {
 
 return (
     <div className='card'>
+        <AiFillCloseCircle size={25} className='deletar' onClick={props.deletarProduto} />
         <div className='cabecalho' style={cssBack}>
             <img src={props.imagem} alt={props.nome}></img>
         </div>

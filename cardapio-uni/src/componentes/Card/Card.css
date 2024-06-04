@@ -1,5 +1,13 @@
 .card {
     width: 12rem;
+    position: relative;
+}
+
+.deletar {
+    position: absolute;
+    right: -0.3rem;
+    top: -0.3rem;
+    cursor: pointer;
 }
 
 .card .cabecalho {
@@ -17,9 +25,11 @@
     box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.08);
     border-radius: 0px 0px 10px 10px;
     padding-top: 5rem;
-    padding-bottom: 2.4rem;
+    padding-bottom: 1rem;
+    overflow-wrap: break-word;
 }
 
+/* Nome */
 .card .rodape h4 {
     color: #6278F7;
     font-size: 1.1rem;
@@ -28,6 +38,7 @@
     margin-bottom: 0.6rem;
 }
 
+/* Descrição */
 .card .rodape h5 {
     font-size: 1.1rem;
     line-height: 1.4rem;

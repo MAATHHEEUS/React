@@ -6,23 +6,53 @@ import Rodape from './componentes/Rodape/Rodape';
 
 function App() {
 
-  const lojas = [
+  const [lojas, setLojas] = useState([
     {
+      id: 1,
       nome: 'Loja 1',
-      primaria: '#57C278',
-      secundaria: '#D9F7E9'
+      cor: '#57C278'
     },
     {
+      id: 2,
       nome: 'Loja 2',
-      primaria: '#fcba03',
-      secundaria: '#f7f7c3'
+      cor: '#fcba03'
     }
-  ];
+  ]);
 
-  const [produtos, setProdutos] = useState([]);
+  const [produtos, setProdutos] = useState([
+    {
+      descricao: "Desc Desc Desc Desc",
+
+      imagem: "https://github.com/MAATHHEEUS.png",
+
+      loja: "Loja 1",
+
+      nome: "Produto x"
+    },{
+      descricao: "Desc Desc Desc Desc dflksnfklsdfnksndlnksçndflksndkfçsdflskçdnf",
+
+      imagem: "https://github.com/MAATHHEEUS.png",
+
+      loja: "Loja 2",
+
+      nome: "Produto x2"
+    }
+  ]);
 
   const adicionaProduto = (produto) => {
+    console.log(produtos);
     setProdutos([...produtos, produto]);
+  }
+
+  const deletarProduto = () => {
+    console.log('Deletando produto!');
+  }
+
+  const mudarCorLoja = (cor, id) => {
+    setLojas(lojas.map((loja) => {
+      if(loja.id === id) loja.cor = cor;
+      return loja;
+    }));
   }
 
   return (
@@ -30,11 +60,14 @@ function App() {
       <Banner />
       <Formulario lojas={lojas} adicionaProduto={produto => adicionaProduto(produto)} />
       {lojas.map(loja => <Loja
-        key={loja.nome}
+        key={loja.id}
+        id={loja.id}
+        mudarCor={mudarCorLoja}
         nome={loja.nome}
-        primaria={loja.primaria}
+        cor={loja.cor}
         secundaria={loja.secundaria}
         produtos={produtos.filter(produto => produto.loja === loja.nome)}
+        deletarProduto={deletarProduto}
       />)}
       <Rodape />
     </>
