@@ -3,6 +3,12 @@
     position: relative;
 }
 
+.favoritar {
+    position: absolute;
+    right: 10rem;
+    cursor: pointer;
+}
+
 .deletar {
     position: absolute;
     right: -0.3rem;

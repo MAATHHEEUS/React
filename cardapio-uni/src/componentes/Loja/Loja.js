@@ -21,6 +21,9 @@ export default function Loja(props) {
                 {props.produtos.map((produto, index) => 
                     <Card
                         key={index}
+                        favoritarProduto={props.favoritarProduto}
+                        idProduto={produto.id}
+                        favorito={produto.favorito}
                         nome={produto.nome}
                         descricao={produto.descricao}
                         imagem={produto.imagem}

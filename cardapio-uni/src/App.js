@@ -3,6 +3,7 @@ import Banner from './componentes/Banner/Banner';
 import Formulario from './componentes/Formulario/Formulario';
 import Loja from './componentes/Loja/Loja';
 import Rodape from './componentes/Rodape/Rodape';
+import uuid4 from "uuid4";
 
 function App() {
 
@@ -21,21 +22,30 @@ function App() {
 
   const [produtos, setProdutos] = useState([
     {
+      id: uuid4(),
+
       descricao: "Desc Desc Desc Desc",
 
       imagem: "https://github.com/MAATHHEEUS.png",
 
       loja: "Loja 1",
 
-      nome: "Produto x"
+      nome: "Produto x",
+
+      favorito: false
     },{
+
+      id: uuid4(), 
+
       descricao: "Desc Desc Desc Desc dflksnfklsdfnksndlnksçndflksndkfçsdflskçdnf",
 
       imagem: "https://github.com/MAATHHEEUS.png",
 
       loja: "Loja 2",
 
-      nome: "Produto x2"
+      nome: "Produto x2",
+
+      favorito: false
     }
   ]);
 
@@ -44,14 +54,22 @@ function App() {
     setProdutos([...produtos, produto]);
   }
 
-  const deletarProduto = () => {
-    console.log('Deletando produto!');
+  const deletarProduto = (id) => {
+    console.log('Deletando produto!'+id);
+    setProdutos(produtos.filter(produto => produto.id !== id));
   }
 
   const mudarCorLoja = (cor, id) => {
     setLojas(lojas.map((loja) => {
       if(loja.id === id) loja.cor = cor;
       return loja;
+    }));
+  }
+
+  const favoritarProduto = (id) => {
+    setProdutos(produtos.map(produto => {
+      if(produto.id === id) produto.favorito = !produto.favorito;
+      return produto;
     }));
   }
 
@@ -62,6 +80,7 @@ function App() {
       {lojas.map(loja => <Loja
         key={loja.id}
         id={loja.id}
+        favoritarProduto={favoritarProduto}
         mudarCor={mudarCorLoja}
         nome={loja.nome}
         cor={loja.cor}

@@ -3,6 +3,7 @@ import './Formulario.css'
 import CampoTexto from '../CampoTexto/CampoTexto'
 import ListaSuspensa from '../ListaSuspensa/ListaSuspensa'
 import Botao from '../Botao/Botao'
+import uuid4 from "uuid4";
 
 export default function Formulario(props) {
 
@@ -12,8 +13,10 @@ export default function Formulario(props) {
     const [loja, setLoja] = useState(props.lojas[0].nome);
 
     const SubmitForm = (evento) => {
+        var id = uuid4();
         evento.preventDefault();
         props.adicionaProduto({
+            id,
             nome,
             descricao,
             imagem,
