@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import Banner from './componentes/Banner/Banner';
-import Formulario from './componentes/Formulario/Formulario';
-import Loja from './componentes/Loja/Loja';
-import Rodape from './componentes/Rodape/Rodape';
+import Banner from '../componentes/Banner/Banner';
+import Formulario from '../componentes/Formulario/Formulario';
+import Loja from '../componentes/Loja/Loja';
+import Rodape from '../componentes/Rodape/Rodape';
 import uuid4 from "uuid4";
 
-function App() {
+function Home() {
 
   const [lojas, setLojas] = useState([
     {
@@ -93,4 +93,4 @@ function App() {
   );
 }
 
-export default App;
+export default Home;

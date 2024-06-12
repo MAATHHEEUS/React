@@ -1,8 +1,8 @@
-import { useState } from 'react'
-import './Formulario.css'
-import CampoTexto from '../CampoTexto/CampoTexto'
-import ListaSuspensa from '../ListaSuspensa/ListaSuspensa'
-import Botao from '../Botao/Botao'
+import { useState } from 'react';
+import './Formulario.css';
+import CampoTexto from '../CampoTexto/CampoTexto';
+import ListaSuspensa from '../ListaSuspensa/ListaSuspensa';
+import Botao from '../Botao/Botao';
 import uuid4 from "uuid4";
 
 export default function Formulario(props) {
