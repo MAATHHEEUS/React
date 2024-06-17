@@ -1,0 +1,28 @@
+.modal {
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    display: flex;
+    background: rgba(49,49,49,0.8);
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: start;
+    background-color: #FFFFFF;
+    color: #000000;
+    font-family: Roboto;
+    border: 1px solid #CCCCCC;
+    padding: 1.8rem;
+    margin: 1rem 2.3rem;
+    width: 65%;
+    box-sizing: border-box;
+}

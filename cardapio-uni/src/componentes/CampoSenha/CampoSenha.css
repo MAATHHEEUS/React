@@ -1,0 +1,33 @@
+.campo__senha {
+    margin: 1.25rem 0rem;
+    /* position: relative; */
+}
+
+.campo__senha label {
+    display: block;
+    margin-bottom: 1.25rem;
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+.container__input {
+    display: flex;
+    position: relative;
+}
+
+.icon_button {
+    position: absolute;
+    right: 10px;
+    top: 65px;
+}
+
+.input {
+    display: block;
+    width: 100%;
+    font-size: 1.25rem;
+    background-color: #FFF;
+    box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.6);
+    border: none;
+    padding: 1.25rem;
+    box-sizing: border-box;
+}

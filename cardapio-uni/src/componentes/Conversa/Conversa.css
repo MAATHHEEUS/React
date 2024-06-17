@@ -1,0 +1,30 @@
+.dwhats {
+    position: fixed;
+    bottom: 30px;
+    z-index: 9999999999;
+    display: flex;
+    align-items: center;
+    left: 15px;
+}
+
+.dwhats {
+    width: 50px;
+    height: 48px;
+    display: block;
+    border-radius: 50%;
+    background: #00a2c7;
+    box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+.dwhats:hover,
+.dwhats:focus {
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6);
+}
+
+.dwhats::before {
+    content: "";
+    display: block;
+    background: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512'%3e%3cpath fill='%23fff' d='M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5'%3e%3c/path%3e%3c/svg%3e")top center no-repeat;
+    height: 35px;
+    margin-top: 6px;
+}
