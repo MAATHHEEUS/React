@@ -5,12 +5,13 @@ import ListaSuspensa from '../ListaSuspensa/ListaSuspensa';
 import Botao from '../Botao/Botao';
 import uuid4 from "uuid4";
 
-export default function Formulario(props) {
+export default function 
+Formulario(props) {
 
     const [nome, setNome] = useState('');
     const [descricao, setDescricao] = useState('');
     const [imagem, setImagem] = useState('');
-    const [loja, setLoja] = useState(props.lojas[0].nome);
+    const [loja, setLoja] = useState(props.lojas.lenght > 0 ? props.lojas[0].nome : "");
 
     const SubmitForm = (evento) => {
         var id = uuid4();
@@ -27,8 +28,10 @@ export default function Formulario(props) {
         setImagem('');
     }
 
+    console.log(props.usuario);
+
     return (
-        <section className="formulario">
+        <section className="formulario" style={{display: props.usuario[4] === "Usuário" ? "none" : "flex"}}>
             <form onSubmit={SubmitForm}>
                 <h2>Preencha os dados para criar o card do produto</h2>
                 <CampoTexto

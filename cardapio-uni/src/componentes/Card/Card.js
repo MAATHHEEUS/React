@@ -14,16 +14,22 @@ export default function Card(props) {
     const propsFavorito = {
         size: 25,
         onClick: favoritar,
-        className: 'favoritar'
+        className: 'favoritar',
+        display: props.usuario === "Loja" ? "none" : "inherit"
     }
 
     return (
         <div className='card'>
             {props.favorito
                 ? <AiFillHeart color='#ff0000' {...propsFavorito} />
-                : <AiOutlineHeart  {...propsFavorito}/>
+                : <AiOutlineHeart  {...propsFavorito} />
             }
-            <AiFillCloseCircle size={25} className='deletar' onClick={() => props.deletarProduto(props.idProduto)} />
+            <AiFillCloseCircle
+                size={25}
+                className='deletar'
+                onClick={() => props.deletarProduto(props.idProduto)}
+                style={{display: props.usuario === "Usuário" ? "none" : "inherit"}}
+            />
             <div className='cabecalho' style={cssBack}>
                 <img src={props.imagem} alt={props.nome}></img>
             </div>

@@ -1,12 +1,12 @@
 import { Link } from 'react-router-dom'
 import './Banner.css'
 
-export default function Banner() {
+export default function Banner({ usuario }) {
     return (
         <header className="banner">
             <img src="./imagens/banner.png" alt="Imagem banner do cardápio UNIVERSAL" />
             <Link to="/Login">
-                Entrar
+                {usuario ? "Sair" : "Entrar"}
             </Link>
         </header>
     )
