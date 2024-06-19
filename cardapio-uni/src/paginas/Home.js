@@ -4,6 +4,7 @@ import Formulario from '../componentes/Formulario/Formulario';
 import Loja from '../componentes/Loja/Loja';
 import Rodape from '../componentes/Rodape/Rodape';
 import uuid4 from "uuid4";
+import Conversa from '../componentes/Conversa/Conversa';
 
 function Home() {
 
@@ -75,6 +76,7 @@ function Home() {
 
   return (
     <>
+      <Conversa />
       <Banner />
       <Formulario lojas={lojas} adicionaProduto={produto => adicionaProduto(produto)} />
       {lojas.map(loja => <Loja

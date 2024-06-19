@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { IoLogoWhatsapp } from "react-icons/io";
 import { FaHome } from "react-icons/fa";
+import Conversa from "../componentes/Conversa/Conversa";
 
 const Imagem = styled.div`
     display: flex;
@@ -44,6 +45,7 @@ export default function NotFound() {
 
     return (
         <>
+            <Conversa />
             <Imagem>
                 <Titulo>Oops! Você deve estar perdido.</Titulo>
                 <Paragrafo>Aqui está alguns links que podem ser úteis:</Paragrafo>

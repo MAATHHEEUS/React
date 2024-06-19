@@ -19,7 +19,7 @@ export default function CampoSenha(props) {
     };
 
     return (
-        <div className="campo__senha">
+        <div className="campo__senha" style={{opacity: props.modal ? 0 : 1}}>
             <label>{props.label}</label>
             <div className='container__input'>
                 <input

@@ -10,6 +10,7 @@ export default function LoginForm() {
 
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
+    const [modal, setModal] = useState(false);
 
     const SubmitForm = (evento) => {
         evento.preventDefault();
@@ -17,9 +18,13 @@ export default function LoginForm() {
         setSenha('');
     }
 
+    const ativaModal = () => {
+        setModal(!modal);
+    }
+
     return (
         <section className="formulario">
-            <ModalResetSenha />
+            <ModalResetSenha modal={modal} ativaModal={ativaModal}/>
             <form onSubmit={SubmitForm}>
                 <h1>Login</h1>
                 <CampoTexto
@@ -34,9 +39,10 @@ export default function LoginForm() {
                     label="Senha"
                     placeholder="Digite sua senha"
                     valor={senha}
+                    modal={modal}
                     atualizaValor={senha => setSenha(senha)}
                 />
-                <a onClick={() => alert("Trocar a senha!")}>Esqueci a senha</a>
+                <a onClick={() => ativaModal()}>Esqueci a senha</a>
                 <Botao>
                     Entrar
                 </Botao>

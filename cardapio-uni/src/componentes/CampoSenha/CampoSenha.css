@@ -1,6 +1,7 @@
 .campo__senha {
     margin: 1.25rem 0rem;
-    /* position: relative; */
+    position: relative;
+    opacity: 1;
 }
 
 .campo__senha label {
@@ -12,7 +13,6 @@
 
 .container__input {
     display: flex;
-    position: relative;
 }
 
 .icon_button {
