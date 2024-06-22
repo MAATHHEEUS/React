@@ -29,6 +29,8 @@ export default function CampoSenha(props) {
                     value={props.valor}
                     required={props.obrigatorio} 
                     placeholder={props.placeholder}
+                    maxLength={props.max}
+                    minLength={6}
                 />
                 <div
                     className="icon_button"

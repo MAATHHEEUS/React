@@ -17,6 +17,7 @@
 }
 
 .card .cabecalho {
+    height: 25%;
     border-radius: 10px 10px 0px 0px;
 }
 .card img {
@@ -27,11 +28,12 @@
 }
 
 .card .rodape {
+    height: auto;
     background: #FFFFFF;
     box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.08);
     border-radius: 0px 0px 10px 10px;
-    padding-top: 5rem;
-    padding-bottom: 1rem;
+    padding-top: 3rem;
+    padding-bottom: 5rem;
     overflow-wrap: break-word;
 }
 
@@ -41,13 +43,15 @@
     font-size: 1.1rem;
     line-height: 1.4rem;
     font-weight: bold;
-    margin-bottom: 0.6rem;
 }
 
 /* Descrição */
 .card .rodape h5 {
-    font-size: 1.1rem;
-    line-height: 1.4rem;
+    font-size: 1rem;
+    line-height: 1.2rem;
+    font-weight: 500;
     color: #212121;
     padding: 0rem 1rem;
+    box-sizing: border-box;
+    max-height: 1rem;
 }

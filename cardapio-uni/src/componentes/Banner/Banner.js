@@ -6,7 +6,7 @@ export default function Banner({ usuario }) {
         <header className="banner">
             <img src="./imagens/banner.png" alt="Imagem banner do cardápio UNIVERSAL" />
             <Link to="/Login">
-                {usuario ? "Sair" : "Entrar"}
+                {usuario[0] !== 0 ? "Sair" : "Entrar"}
             </Link>
         </header>
     )

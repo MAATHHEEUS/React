@@ -10,9 +10,10 @@ import Informativo from '../componentes/Informativo/Informativo';
 function Home() {
 
   useEffect(() => {
-    async function getLojas() {
+    async function getDados() {
       try {
-        const conexao = await fetch("https://api.jsonbin.io/v3/b/667314ece41b4d34e405ba11", {
+        // Lojas
+        let conexao = await fetch("https://api.jsonbin.io/v3/b/667314ece41b4d34e405ba11", {
           method: "GET",
           headers: {
             "X-Master-Key": "$2a$10$ZBNe5zljorQD6qhdzyP4C.JZMmoCkQA7gEcIcOPaP9EWWtn7NYzGW"
@@ -22,92 +23,70 @@ function Home() {
         else {
           const conexaoConvertida = conexao.json();
           conexaoConvertida.then(res => {
-            console.log(res.record.lojas);
             setLojas(res.record.lojas);
           });
         }
+
+        // Produtos
+        conexao = await fetch("https://api.jsonbin.io/v3/b/66770020acd3cb34a85b8427", {
+          method: "GET",
+          headers: {
+            "X-Master-Key": "$2a$10$ZBNe5zljorQD6qhdzyP4C.JZMmoCkQA7gEcIcOPaP9EWWtn7NYzGW"
+          }
+        });
+        if (!conexao.ok) throw new Error("Não foi possível acessar API com os produtos.");
+        else {
+          const conexaoConvertida = conexao.json();
+          conexaoConvertida.then(res => {
+            setProdutos(res.record.produtos);
+          });
+        }
       } catch (error) {
-        console.log(error);
+        console.log(`Erro no getDados :: ${error}`);
       }
     }
-    getLojas();
+    getDados();
   }, []);
 
-  const [usuario, setUsuario] = useState(JSON.parse(localStorage.getItem('usuario')));
+  const usuarioNull = [
+    0, "null", "null", "null"
+  ];
+
+  const [usuario, setUsuario] = useState(localStorage.getItem('usuario') ? JSON.parse(localStorage.getItem('usuario')) : usuarioNull);
 
   const [lojas, setLojas] = useState([]);
 
-  const [produtos, setProdutos] = useState([
-    {
-      id: uuid4(),
+  const [produtos, setProdutos] = useState([]);
 
-      descricao: "Desc Desc Desc Desc",
-
-      imagem: "https://github.com/MAATHHEEUS.png",
-
-      loja: "Loja 1",
-
-      nome: "Produto x",
-
-      favorito: false
-    }, {
-
-      id: uuid4(),
-
-      descricao: "Desc Desc Desc Desc dflksnfklsdfnksndlnksçndflksndkfçsdflskçdnf",
-
-      imagem: "https://github.com/MAATHHEEUS.png",
-
-      loja: "Loja 2",
-
-      nome: "Produto x2",
-
-      favorito: false
-    }
-  ]);
-
-  const adicionaProduto = async (produto) => {
-    console.log(produtos);
-    setProdutos([...produtos, produto]);
+  const adicionaProduto = (produto) => {
+    setProdutos([produto, ...produtos]);
+    PUT_Produto(produto);
   }
 
-  async function criarProduto(nome, valor, imagem) {
-    const conexao = await fetch("https://api.jsonbin.io/v3/b/667314ece41b4d34e405ba11", {
-      method: "PUT",
-      headers: {
-        "Content-type": "application/json",
-        "X-Master-Key": "$2a$10$ZBNe5zljorQD6qhdzyP4C.JZMmoCkQA7gEcIcOPaP9EWWtn7NYzGW"
-      },
-      body: JSON.stringify({
-        "lojas": [
-          {
-            "id": 1,
-            "nome": "Loja 1",
-            "cor": "#57C278"
-          },
-          {
-            "id": 2,
-            "nome": "Loja Editada",
-            "cor": "#fcba03"
-          }
-        ],
-        "usuarios": [
-          {
-            "id": 1,
-            "nome": "João",
-            "email": "email",
-            "senha": "1234",
-            "tipo": "usuario"
-          }
-        ]
-      })
-    });
-    if (!conexao.ok) throw new Error("Não foi possível guardar o produto.");
+  async function PUT_Produto(produto) {
+    try {
+      const conexao = await fetch("https://api.jsonbin.io/v3/b/66770020acd3cb34a85b8427", {
+        method: "PUT",
+        headers: {
+          "Content-type": "application/json",
+          "X-Master-Key": "$2a$10$ZBNe5zljorQD6qhdzyP4C.JZMmoCkQA7gEcIcOPaP9EWWtn7NYzGW"
+        },
+        body: JSON.stringify({
+          "produtos": [
+            ...produtos,
+            produto
+          ]
+        })
+      });
+      if (!conexao.ok) throw new Error("Não foi possível atualizar produtos.");
+    } catch (error) {
+      console.log(`Erro no PUT_Produto :: ${error}`);
+    }
   }
 
   const deletarProduto = (id) => {
-    console.log('Deletando produto!' + id);
     setProdutos(produtos.filter(produto => produto.id !== id));
+    console.log(produtos);
   }
 
   const mudarCorLoja = (cor, id) => {
@@ -115,16 +94,39 @@ function Home() {
       if (loja.id === id) loja.cor = cor;
       return loja;
     }));
+    PUT_Loja();
+  }
+
+  async function PUT_Loja() {
+    try {
+      const conexao = await fetch("https://api.jsonbin.io/v3/b/667314ece41b4d34e405ba11", {
+        method: "PUT",
+        headers: {
+          "Content-type": "application/json",
+          "X-Master-Key": "$2a$10$ZBNe5zljorQD6qhdzyP4C.JZMmoCkQA7gEcIcOPaP9EWWtn7NYzGW"
+        },
+        body: JSON.stringify({
+          "lojas": [
+            ...lojas
+          ]
+        })
+      });
+      if (!conexao.ok) throw new Error("Não foi possível atualizar lojas.");
+    } catch (error) {
+      console.log(`Erro no PUT_Loja :: ${error}`);
+    }
   }
 
   const favoritarProduto = (id) => {
-    setProdutos(produtos.map(produto => {
-      if (produto.id === id) produto.favorito = !produto.favorito;
-      return produto;
-    }));
+    if (usuario[4] === "Usuário") {
+      setProdutos(produtos.map(produto => {
+        if (produto.id === id) produto.favorito = !produto.favorito;
+        return produto;
+      }));
+    } else {
+      alert("Entre com seu login para poder favoritar!");
+    }
   }
-
-  console.log(usuario);
 
   return (
     <>

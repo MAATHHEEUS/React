@@ -28,7 +28,7 @@ export default function Card(props) {
                 size={25}
                 className='deletar'
                 onClick={() => props.deletarProduto(props.idProduto)}
-                style={{display: props.usuario === "Usuário" ? "none" : "inherit"}}
+                style={{display: props.usuario !== "Loja" ? "none" : "inherit"}}
             />
             <div className='cabecalho' style={cssBack}>
                 <img src={props.imagem} alt={props.nome}></img>

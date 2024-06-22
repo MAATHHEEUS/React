@@ -6,7 +6,7 @@ export default function Loja(props) {
 
     const cssBack = {
         backgroundColor: hexToRgba(props.cor, '0.4'),
-        display: (props.usuario[4] === "Loja" && props.usuario[1] === props.nome) || props.usuario[4] === "Usuário" ? "inherit": "none"
+        display: (props.usuario[4] === "Loja" && props.usuario[1] === props.nome) || props.usuario[4] !== "Loja" ? "inherit": "none"
     };
 
     const cssTitle = {
@@ -24,7 +24,7 @@ export default function Loja(props) {
                 value={props.cor}
                 type='color'
                 className='input-cor'
-                style={{ display: props.usuario[4] === "Usuário" ? "none" : "inherit" }}
+                style={{ display: props.usuario[4] !== "Loja" ? "none" : "inherit" }}
             />
             <h3 style={cssTitle}>{props.nome}</h3>
             <div className='produtos'>

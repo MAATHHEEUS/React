@@ -6,11 +6,12 @@ export default function ListaSuspensa(props) {
         props.atualizaValor(evento.target.value);
     }
 
-    return(
+    return (
         <div className="lista__suspensa">
             <label>{props.label}</label>
             <select required={props.obrigatorio} value={props.valor} onChange={AtualizaValor}>
-                {props.items.map(item => <option key={item.nome}>{item.nome}</option>)}
+                <option value=""></option>
+                {props.items.map(item => <option key={item.nome} value={item.nome}>{item.nome}</option>)}
             </select>
         </div>
     )

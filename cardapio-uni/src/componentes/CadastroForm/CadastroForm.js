@@ -60,28 +60,33 @@ export default function CadastroForm() {
             "nome": nome,
             "email": email,
             "senha": senha,
-            "tipo": tipo
+            "tipo": tipo,
+            "favoritos": []
         };
-        const conexao = await fetch("https://api.jsonbin.io/v3/b/66731fe7acd3cb34a859f313", {
-            method: "PUT",
-            headers: {
-                "Content-type": "application/json",
-                "X-Master-Key": "$2a$10$ZBNe5zljorQD6qhdzyP4C.JZMmoCkQA7gEcIcOPaP9EWWtn7NYzGW"
-            },
-            body: JSON.stringify({
-                "usuarios": [
-                    ...usuarios,
-                    usuarioNovo
-                ]
-            })
-        });
-        if (!conexao.ok) throw new Error("Não foi possível cadastrar o usuário.");
-        else{
-            setEmail("");
-            setNome("");
-            setSenha("");
-            alert("Cadastro realizado com sucesso!");
-            navigate("/Login");
+        try {
+            const conexao = await fetch("https://api.jsonbin.io/v3/b/66731fe7acd3cb34a859f313", {
+                method: "PUT",
+                headers: {
+                    "Content-type": "application/json",
+                    "X-Master-Key": "$2a$10$ZBNe5zljorQD6qhdzyP4C.JZMmoCkQA7gEcIcOPaP9EWWtn7NYzGW"
+                },
+                body: JSON.stringify({
+                    "usuarios": [
+                        ...usuarios,
+                        usuarioNovo
+                    ]
+                })
+            });
+            if (!conexao.ok) throw new Error("Não foi possível cadastrar o usuário.");
+            else {
+                setEmail("");
+                setNome("");
+                setSenha("");
+                alert("Cadastro realizado com sucesso!");
+                navigate("/Login");
+            }
+        } catch (error) {
+            console.log(`Erro no PUT_User :: ${error}`);
         }
     }
 
@@ -92,6 +97,7 @@ export default function CadastroForm() {
                 <CampoTexto
                     obrigatorio={true}
                     label="Email"
+                    max={100}
                     placeholder="Digite um email válido"
                     valor={email}
                     atualizaValor={valor => setEmail(valor)}
@@ -99,6 +105,7 @@ export default function CadastroForm() {
                 <CampoSenha
                     obrigatorio={true}
                     label="Senha"
+                    max={30}
                     placeholder="Digite uma senha"
                     valor={senha}
                     atualizaValor={senha => setSenha(senha)}
@@ -113,6 +120,7 @@ export default function CadastroForm() {
                 <CampoTexto
                     obrigatorio={true}
                     label={tipo}
+                    max={60}
                     placeholder={tipo == 'Loja' ? "Nome da Loja" : "Nome do Usuário"}
                     valor={nome}
                     atualizaValor={valor => setNome(valor)}

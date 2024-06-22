@@ -65,6 +65,7 @@ export default function LoginForm() {
                 <CampoTexto
                     obrigatorio={true}
                     label="Email"
+                    max={100}
                     placeholder="Digite o email cadastrado"
                     valor={email}
                     atualizaValor={email => setEmail(email)}
@@ -75,6 +76,7 @@ export default function LoginForm() {
                     placeholder="Digite sua senha"
                     valor={senha}
                     modal={modal}
+                    max={30}
                     atualizaValor={senha => setSenha(senha)}
                 />
                 <a onClick={() => ativaModal()}>Esqueci a senha</a>
