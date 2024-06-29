@@ -3,7 +3,6 @@ import Banner from '../componentes/Banner/Banner';
 import Formulario from '../componentes/Formulario/Formulario';
 import Loja from '../componentes/Loja/Loja';
 import Rodape from '../componentes/Rodape/Rodape';
-import uuid4 from "uuid4";
 import Conversa from '../componentes/Conversa/Conversa';
 import Informativo from '../componentes/Informativo/Informativo';
 
@@ -86,7 +85,26 @@ function Home() {
 
   const deletarProduto = (id) => {
     setProdutos(produtos.filter(produto => produto.id !== id));
-    console.log(produtos);
+    DELETE_Produto(id);
+  }
+
+  async function DELETE_Produto(id) {
+    try {
+      const conexao = await fetch("https://api.jsonbin.io/v3/b/66770020acd3cb34a85b8427", {
+        method: "PUT",
+        headers: {
+          "Content-type": "application/json",
+          "X-Master-Key": "$2a$10$ZBNe5zljorQD6qhdzyP4C.JZMmoCkQA7gEcIcOPaP9EWWtn7NYzGW"
+        },
+        body: JSON.stringify({
+          "produtos": 
+            produtos.filter(produto => produto.id !== id)
+        })
+      });
+      if (!conexao.ok) throw new Error("Não foi possível deletar o produto.");
+    } catch (error) {
+      console.log(`Erro no DELETE_Produto :: ${error}`);
+    }
   }
 
   const mudarCorLoja = (cor, id) => {
