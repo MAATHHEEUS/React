@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Botao from "../Botao/Botao";
 import CampoSenha from "../CampoSenha/CampoSenha";
 import CampoTexto from "../CampoTexto/CampoTexto";
+import ModalTermos from '../ModalTermos/TermosUso';
 import ListaSuspensa from "../ListaSuspensa/ListaSuspensa";
 import uuid4 from "uuid4";
 
@@ -14,6 +15,7 @@ export default function CadastroForm() {
     const [senha, setSenha] = useState("");
     const [tipo, setTipo] = useState("Loja");
     const navigate = useNavigate();
+    const [modal, setModal] = useState(false);
     const [tipos, setTipos] = useState([
         {
             id: 1,
@@ -90,8 +92,13 @@ export default function CadastroForm() {
         }
     }
 
+    const ativaModal = () => {
+        setModal(!modal);
+    }
+
     return (
         <section className="formulario">
+            <ModalTermos modal={modal} ativaModal={ativaModal} />
             <form onSubmit={(evento) => cadastrar(evento)}>
                 <h2>Preencha os dados para realizar o cadastro</h2>
                 <CampoTexto
@@ -108,6 +115,7 @@ export default function CadastroForm() {
                     max={30}
                     placeholder="Digite uma senha"
                     valor={senha}
+                    modal={modal}
                     atualizaValor={senha => setSenha(senha)}
                 />
                 <ListaSuspensa
@@ -125,6 +133,10 @@ export default function CadastroForm() {
                     valor={nome}
                     atualizaValor={valor => setNome(valor)}
                 />
+                <div style={{ display: "flex" }}>
+                    <input type="checkbox" required />
+                    <p>Ao criar uma conta, você concorda com as <a onClick={() => ativaModal()}>Condições de Uso</a>.</p>
+                </div>
                 <Botao>
                     Cadastrar
                 </Botao>

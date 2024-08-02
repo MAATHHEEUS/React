@@ -1,0 +1,64 @@
+.modal {
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    display: none;
+    background: rgba(49,49,49,0.8);
+}
+
+.container {
+    display: block;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #FFFFFF;
+    color: #000000;
+    font-family: Roboto;
+    border: 1px solid #CCCCCC;
+    padding: 1.8rem;
+    margin: 1rem 2.3rem;
+    width: 80%;
+    height: 80%;
+    box-sizing: border-box;
+    position: fixed;
+}
+
+.icon__x {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    cursor: pointer;
+    color: #f83432;
+}
+
+.scrollable {
+    position: absolute;
+    width: auto;
+    height: calc(100% - 140px);
+    overflow-y: auto;
+}
+
+.modal .container .scrollable::-webkit-scrollbar {
+    width: 10px;
+}
+
+.modal .container .scrollable::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 2px #333; 
+    border-radius: 10px;
+}
+    
+.modal .container .scrollable::-webkit-scrollbar-thumb {
+    background: rgba(51,51,51,0.8);
+    opacity: 0.6;
+    border-radius: 10px;
+}
+
+.modal .container .scrollable::-webkit-scrollbar-thumb:hover {
+    background: rgba(51,51,51,1);
+}
