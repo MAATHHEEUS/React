@@ -19,10 +19,6 @@
 
  - Consumindo API e trabalhando rotas de navegação.
 
-### cardapio-uni
-
- - Projeto pessoal de um cardápio universal, onde o usuário terá todas as refeições da praça de alimentação do shopping em um só lugar. Trabalhando com API's, states e todo conteúdo que aprendi durante os cursos.
-
 ### codeleap-test
 
  - Projeto desenvolvido como parte avaliativa do processo seletivo da empresa codeleap para a vaga de Dev JR.
