@@ -4,6 +4,7 @@ import "./styles/reset.css";
 import Header from './components/Header.js';
 import Main from './components/Main.js';
 import Footer from './components/Footer.js';
+import ChatBot from './components/ChatBot.js';
 
 function App() {
   return (
@@ -11,16 +12,7 @@ function App() {
       <Header/>
       <Main/>
       <Footer/>
-      {/* <header>
-        <Link to='/'>Home</Link>
-        <Link to='/api'>Lista Carros da API</Link>
-      </header>
-      <main>
-        <Routes>
-          <Route path="/"/>
-          <Route path="/api" element="" />
-        </Routes>
-      </main> */}
+      <ChatBot />
     </div>
   );
 }
