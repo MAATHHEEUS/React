@@ -116,6 +116,21 @@
     height: 3.4rem;
 }
 
+.botao__excluir {
+    cursor: pointer;
+    color: red;
+    border: none;
+    border-radius: 0.9rem;
+    font-size: 1.25rem;
+    font-weight: 500;
+    line-height: 1.6rem;
+    text-align: center;
+    font-family: "IBM Plex Mono", monospace;
+    font-style: normal;
+    width: 11.75rem;
+    height: 3.4rem;
+}
+
 @media (min-width: 840px) {
     .main{
         flex-direction: row;

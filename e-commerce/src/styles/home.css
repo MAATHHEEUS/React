@@ -1,0 +1,50 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&display=swap');
+
+.buttons {
+    font-family: "Press Start 2P", system-ui;
+    font-weight: 400;
+    font-style: normal;
+    display: flex;
+    padding: 3.75rem 2.5rem 3.75rem 2.5rem;
+    justify-content: center;
+    gap: 4.375rem;
+    border-radius: 0.625rem 0rem 0rem 0rem;
+    opacity: 0rem;
+}
+
+.botao__user {
+    cursor: pointer;
+    text-decoration: none;
+    align-content: center;
+    background-color: blue;
+    color: white;
+    border: none;
+    border-radius: 0.9rem;
+    font-size: 1.25rem;
+    font-weight: 500;
+    line-height: 1.6rem;
+    text-align: center;
+    font-family: "IBM Plex Mono", monospace;
+    font-style: normal;
+    width: 11.75rem;
+    height: 3.4rem;
+}
+
+.botao__adm {
+    cursor: pointer;
+    text-decoration: none;
+    align-content: center;
+    background-color: grey;
+    color: blue;
+    border: none;
+    border-radius: 0.9rem;
+    font-size: 1.25rem;
+    font-weight: 500;
+    line-height: 1.6rem;
+    text-align: center;
+    font-family: "IBM Plex Mono", monospace;
+    font-style: normal;
+    width: 11.75rem;
+    height: 3.4rem;
+}

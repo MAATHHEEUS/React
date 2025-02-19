@@ -186,31 +186,31 @@ No Atacadão, o "Café Brasileiro Tradicional Stand Pack" de 500 g é oferecido 
     return (
         <>
             {/* <!-- CHAT BAR BLOCK --> */}
-            <div class="chat-bar-collapsible">
-                <button id="chat-button" type="button" class="collapsible">Consute os preços!
+            <div className="chat-bar-collapsible">
+                <button id="chat-button" type="button" className="collapsible">Consute os preços!
                     <FaCommentsDollar  id="chat-icon" style={{ color: '#fff' }} />
                 </button>
 
-                <div class="content_chat">
-                    <div class="full-chat-block">
+                <div className="content_chat">
+                    <div className="full-chat-block">
                         {/* <!-- Message Container --> */}
-                        <div class="outer-container">
-                            <div class="chat-container">
+                        <div className="outer-container">
+                            <div className="chat-container">
                                 {/* <!-- Messages --> */}
                                 <div id="chatbox">
                                     <h5 id="chat-timestamp"></h5>
-                                    <p id="botStarterMessage" class="botText"><span>Carregando...</span></p>
+                                    <p id="botStarterMessage" className="botText"><span>Carregando...</span></p>
                                 </div>
                                 {/* 
                                     <!-- User input box --> */}
-                                <div class="chat-bar-input-block">
+                                <div className="chat-bar-input-block">
                                     <div id="userInput">
-                                        <input id="textInput" class="input-box" type="text" name="msg"
+                                        <input id="textInput" className="input-box" type="text" name="msg"
                                             placeholder="Digite o nome do produto" />
                                         <p></p>
                                     </div>
 
-                                    <div class="chat-bar-icons">
+                                    <div className="chat-bar-icons">
                                         <FaHeart id="chat-icon" style={{ color: '#fff' }} onClick={() => HeartButton()} />
                                         <FaGreaterThan id="chat-icon" style={{ color: '#333' }} onClick={() => SendButton()}/>
                                     </div>

@@ -11,7 +11,7 @@ export default function Main() {
         return <div className='main__products__container'>
             {
                 produtos.map(
-                    produto => <Card key={produto.id} id={produto.id} nome={produto.nome} preco={produto.valor} img={produto.imagem} funcaoClick={evento => excluirProduto(evento, produto.id)} />
+                    produto => <Card key={produto.id_prod} id={produto.id_prod} nome={produto.nome_prod} preco={produto.valor_prod} img={produto.imagem_prod} funcaoClick={evento => excluirProduto(evento, produto.id_prod)} />
                 )
             }
         </div>
@@ -20,7 +20,7 @@ export default function Main() {
     const excluirProduto = async (evento, id) => {
         evento.preventDefault();
         try {
-            const conexao = await fetch(`http://localhost:4000/produtos/${id}`, {
+            const conexao = await fetch(`http://localhost:3001/produtos/${id}`, {
                 method: "DELETE",
                 headers: {
                     "Content-type": "application/json"
@@ -39,7 +39,7 @@ export default function Main() {
     useEffect(() => {
         async function getProdutos() {
             try {
-                const conexao = await fetch("http://localhost:4000/produtos");
+                const conexao = await fetch("http://localhost:3001/produtos");
                 if (!conexao.ok) throw new Error("Não foi possível acessar API com os produtos.");
                 else {
                     const conexaoConvertida = conexao.json();
@@ -80,7 +80,7 @@ export default function Main() {
     }
 
     async function criarProduto(nome, valor, imagem) {
-        const conexao = await fetch("http://localhost:4000/produtos", {
+        const conexao = await fetch("http://localhost:3001/produtos", {
             method: "POST",
             headers: {
                 "Content-type": "application/json"
