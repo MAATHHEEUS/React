@@ -28,7 +28,7 @@ app.listen(3001, () => {
 
 // Produtos
 app.get("/produtos", (req, res) => {
-    con.query("SELECT * FROM `produto`", function (err, result, fields) {
+    con.query("SELECT * FROM `produto` WHERE situacao_prod = 'A'", function (err, result, fields) {
         if (err) throw err;
         res.send(result);
     });
@@ -57,7 +57,7 @@ app.post("/produtos", (req, res) => {
 
 app.delete("/produtos/:id", (req, res) => {
     const {id} = req.params;
-    con.query(`DELETE FROM produto WHERE id_prod = '${id}'`, function (err, result) {
+    con.query(`UPDATE produto SET situacao_prod = 'I' WHERE id_prod = '${id}'`, function (err, result) {
         if (err) throw err;
         res.send(result);
     });
@@ -66,7 +66,7 @@ app.delete("/produtos/:id", (req, res) => {
 // Cliente
 app.get("/cliente/:email", (req, res) => {
     const {email} = req.params;
-    con.query(`SELECT * FROM cliente WHERE email_cliente = '${email}'`, function (err, result, fields) {
+    con.query(`SELECT * FROM cliente WHERE email_cliente = '${email}' AND situacao_cliente != 'I'`, function (err, result, fields) {
         if (err) throw err;
         res.send(result);
     });
@@ -77,14 +77,8 @@ app.put("/cliente/:id", (req, res) => {
     const {email} = req.body;
     const {nascimento} = req.body;
     const {cpf} = req.body;
-    const {cep} = req.body;
-    const {rua} = req.body;
-    const {bairro} = req.body;
-    const {numero} = req.body;
-    const {cidade} = req.body;
-    const {uf} = req.body;
     const {id} = req.params;
-    con.query(`UPDATE cliente SET nome_cliente = '${nome}', email_cliente = '${email}', nasc_cliente = '${nascimento}', CPF_cliente = '${cpf}', cep_cliente = '${cep}', rua_cliente = '${rua}', bairro_cliente = '${bairro}', numero_cliente = '${numero}', cidade_cliente = '${cidade}', uf_cliente = '${uf}' WHERE id_cliente = '${id}'`, function (err, result, fields) {
+    con.query(`UPDATE cliente SET nome_cliente = '${nome}', email_cliente = '${email}', nasc_cliente = '${nascimento}', CPF_cliente = '${cpf}' WHERE id_cliente = '${id}'`, function (err, result, fields) {
         if (err) throw err;
         res.send(result);
     });
@@ -95,13 +89,8 @@ app.post("/cliente", (req, res) => {
     const {email} = req.body;
     const {nascimento} = req.body;
     const {cpf} = req.body;
-    const {cep} = req.body;
-    const {rua} = req.body;
-    const {bairro} = req.body;
-    const {numero} = req.body;
-    const {cidade} = req.body;
-    const {uf} = req.body;
-    con.query(`INSERT INTO cliente(nome_cliente, email_cliente, nasc_cliente, CPF_cliente, cep_cliente, rua_cliente, numero_cliente, bairro_cliente, cidade_cliente, uf_cliente) VALUES ('${nome}','${email}','${nascimento}','${cpf}','${cep}','${rua}','${numero}','${bairro}','${cidade}','${uf}')`, function (err, result) {
+    
+    con.query(`INSERT INTO cliente(nome_cliente, email_cliente, nasc_cliente, CPF_cliente) VALUES ('${nome}','${email}','${nascimento}','${cpf}')`, function (err, result) {
         if (err) throw err;
         res.send(result);
     });
@@ -109,7 +98,105 @@ app.post("/cliente", (req, res) => {
 
 app.delete("/cliente/:id", (req, res) => {
     const {id} = req.params;
-    con.query(`DELETE FROM cliente WHERE id_cliente = '${id}'`, function (err, result) {
+    con.query(`UPDATE cliente SET situacao_cliente = 'I' WHERE id_cliente = '${id}'`, function (err, result) {
+        if (err) throw err;
+        res.send(result);
+    });
+});
+
+// Endereço
+app.get("/endereco/:id_cliente", (req, res) => {
+    const {id_cliente} = req.params;
+    con.query(`SELECT * FROM endereco WHERE id_cliente_end = '${id_cliente}' AND situacao_end = 'A'`, function (err, result, fields) {
+        if (err) throw err;
+        res.send(result);
+    });
+});
+
+app.put("/endereco/:id", (req, res) => {
+    const {identificacao} = req.body;
+    const {tipo} = req.body;
+    const {cep} = req.body;
+    const {rua} = req.body;
+    const {bairro} = req.body;
+    const {numero} = req.body;
+    const {cidade} = req.body;
+    const {uf} = req.body;
+    const {id} = req.params;
+    con.query(`UPDATE endereco SET identificacao_end = '${identificacao}', tipo = '${tipo}', cep_end = '${cep}', rua_end = '${rua}', bairro_end = '${bairro}', UF = '${uf}', numero_end = ${numero}, cidade = '${cidade}' WHERE id_end = '${id}'`, function (err, result, fields) {
+        if (err) throw err;
+        res.send(result);
+    });
+});
+
+app.post("/endereco", (req, res) => {
+    const {identificacao} = req.body;
+    const {tipo} = req.body;
+    const {cep} = req.body;
+    const {rua} = req.body;
+    const {bairro} = req.body;
+    const {numero} = req.body;
+    const {cidade} = req.body;
+    const {uf} = req.body;
+    const {id_cliente} = req.body;
+    
+    con.query(`INSERT INTO endereco(identificacao_end, tipo, cep_end, rua_end, bairro_end, UF, numero_end, cidade, id_cliente_end) VALUES ('${identificacao}','${tipo}','${cep}','${rua}', '${bairro}', '${uf}', '${numero}', '${cidade}', '${id_cliente}')`, function (err, result) {
+        if (err) throw err;
+        res.send(result);
+    });
+});
+
+app.delete("/endereco/:id", (req, res) => {
+    const {id} = req.params;
+    con.query(`UPDATE endereco SET situacao_end = 'I' WHERE id_end = '${id}'`, function (err, result) {
+        if (err) throw err;
+        res.send(result);
+    });
+});
+
+// Cartão
+app.get("/cartao/:id_cliente", (req, res) => {
+    const {id_cliente} = req.params;
+    con.query(`SELECT * FROM cartao WHERE id_cliente_card = '${id_cliente}' AND situacao_card = 'A'`, function (err, result, fields) {
+        if (err) throw err;
+        res.send(result);
+    });
+});
+
+app.put("/cartao/:id", (req, res) => {
+    const {identificacao} = req.body;
+    const {nome} = req.body;
+    const {numero} = req.body;
+    const {tipo} = req.body;
+    const {cvv} = req.body;
+    const {bandeira} = req.body;
+    const {vencimento} = req.body;
+    const {id} = req.params;
+    con.query(`UPDATE cartao SET identificacao_card = '${identificacao}', tipo_card = '${tipo}', nome_card = '${nome}', cvv_card = '${cvv}', numero_card = '${numero}', bandeira_card = '${bandeira}', vencimento_card = '${vencimento}' WHERE id_card = '${id}'`, function (err, result, fields) {
+        if (err) throw err;
+        res.send(result);
+    });
+});
+
+app.post("/cartao", (req, res) => {
+    const {identificacao} = req.body;
+    const {nome} = req.body;
+    const {tipo} = req.body;
+    const {numero} = req.body;
+    const {cvv} = req.body;
+    const {bandeira} = req.body;
+    const {vencimento} = req.body;
+    const {id_cliente} = req.body;
+    
+    con.query(`INSERT INTO cartao(identificacao_card, tipo_card, cvv_card, nome_card, bandeira_card, numero_card, vencimento_card, id_cliente_card) VALUES ('${identificacao}','${tipo}','${cvv}','${nome}','${bandeira}', '${numero}', '${vencimento}', '${id_cliente}')`, function (err, result) {
+        if (err) throw err;
+        res.send(result);
+    });
+});
+
+app.delete("/cartao/:id", (req, res) => {
+    const {id} = req.params;
+    con.query(`UPDATE cartao SET situacao_card = 'I' WHERE id_card = '${id}'`, function (err, result) {
         if (err) throw err;
         res.send(result);
     });
