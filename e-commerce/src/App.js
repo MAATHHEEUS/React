@@ -8,6 +8,7 @@ import Footer from './components/Footer.js';
 import ChatBot from './components/ChatBot.js';
 import Client from './components/Client.js';
 import Home from './components/Home.js';
+import Loja from './components/Loja.js';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
       <Route path="/" element={<Home />}/>
       <Route path="/adm" element={<Main />} />
       <Route path="/user" element={<Client />} />
+      <Route path='/loja' element={<Loja />} />
       <Route path='*' element={<Home />} />
     </Routes>
     <Footer />

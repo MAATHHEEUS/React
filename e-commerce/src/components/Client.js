@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import "../styles/client.css";
 
 export default function Client() {
+
+    const navigate = useNavigate();
 
     // CONTROLE //
     const [isClient, setIsClient] = useState(false);
@@ -53,12 +56,12 @@ export default function Client() {
         const email = document.getElementById("email").value;
         const nascimento = document.getElementById("nascimento").value;
         const cpf = document.getElementById("cpf").value;
+        const senha = document.getElementById("senha").value;
 
         try {
-            isClient ? await atualizaCliente(cliente.id_cliente, nome, email, nascimento, cpf) : await criarCliente(nome, email, nascimento, cpf);
+            isClient ? await atualizaCliente(cliente.id_cliente, nome, email, nascimento, cpf, senha) : await criarCliente(nome, email, nascimento, cpf);
             alert('Dados guardados com sucesso.');
             window.location.reload();
-            // window.open(`http://localhost:3000/Home/${cliente.id_cliente}`, "_self");
         } catch (error) {
             alert(error);
         }
@@ -80,7 +83,7 @@ export default function Client() {
         if (!conexao.ok) throw new Error("Não foi possível guardar os dados do cliente.");
     }
 
-    async function atualizaCliente(id, nome, email, nascimento, cpf) {
+    async function atualizaCliente(id, nome, email, nascimento, cpf, senha) {
         const conexao = await fetch(`http://localhost:3001/cliente/${id}`, {
             method: "PUT",
             headers: {
@@ -90,7 +93,8 @@ export default function Client() {
                 nome: nome,
                 email: email,
                 nascimento: nascimento,
-                cpf: cpf
+                cpf: cpf,
+                senha: senha
             })
         });
         if (!conexao.ok) throw new Error("Não foi possível guardar os dados do cliente.");
@@ -122,16 +126,13 @@ export default function Client() {
 
     const [cliente, setCliente] = useState({
         CPF_cliente: "",
-        bairro_cliente: "",
-        cep_cliente: "",
-        cidade_cliente: "",
+        situacao_cliente: "",
+        senha: "",
         email_cliente: "",
         id_cliente: 0,
         nasc_cliente: "",
         nome_cliente: "",
-        numero_cliente: "",
-        rua_cliente: "",
-        uf_cliente: ""
+        telefone_cliente: "",
     });
 
     const onChange = (e) => {
@@ -145,6 +146,7 @@ export default function Client() {
     }
 
     function montaCliente(cliente) {
+        localStorage.setItem("cliente", cliente.id_cliente);
         setCliente(cliente);
         setFormControl(true);
         setIsClient(true);
@@ -432,8 +434,11 @@ export default function Client() {
                 <div className="sidebar" id="sidebar">
                     <button onClick={() => toggleMenu()}>☰</button>
                     <div className="menu-item" onClick={evento => showContent(evento, 'Cliente')}>👤 Cliente</div>
+                    <div className="menu-item" style={!isClient ? { opacity: '0.6', cursor: 'not-allowed' } : {}} onClick={evento => showContent(evento, 'Senha')}>🔑 Senha</div>
                     <div className="menu-item" style={!isClient ? { opacity: '0.6', cursor: 'not-allowed' } : {}} onClick={evento => showContent(evento, 'Endereco')}>📍 Endereços</div>
                     <div className="menu-item" style={!isClient ? { opacity: '0.6', cursor: 'not-allowed' } : {}} onClick={evento => showContent(evento, 'Cartao')}>💳 Cartões</div>
+                    <div className="menu-item" style={!isClient ? { opacity: '0.6', cursor: 'not-allowed' } : {}} onClick={evento => showContent(evento, 'Transacao')}>🔄 Transações</div>
+                    <div className="menu-item" style={!isClient ? { opacity: '0.6', cursor: 'not-allowed', marginTop: '15px' } : { marginTop: '55px' }} onClick={() => navigate('/loja')}>🛍️ Loja</div>
                 </div>}
             {formControl && <>
                 <form className='main__form' style={formDisplay !== 'Endereco' ? { display: 'none' } : {}}>
@@ -502,6 +507,17 @@ export default function Client() {
                         {!isClient ? <button className='botao__limpar' onClick={evento => limparForm(evento)}>Limpar</button> : <button className='botao__excluir' onClick={evento => excluirCliente(evento, cliente.id_cliente)}>Inativar</button>}
                     </div>
                 </form>
+                <form className='main__form' style={formDisplay !== 'Senha' ? { display: 'none' } : {}}>
+                    {!isClient ? <h2 className='main__form__titulo'>Cadastro de senha:</h2> : <h2 className='main__form__titulo'>Edição de senha:</h2>}
+                    <div className='main__form__input'>
+                        <label className='input__label'>senha...</label>
+                        <input className='form__input' id='senha' type='password' onChange={onChange} defaultValue={cliente.senha}></input>
+                    </div>
+
+                    <div className='main__form__botoes'>
+                        <button className='botao__guardar' onClick={evento => submitForm(evento)}>Guardar</button>
+                    </div>
+                </form>
                 <form className='main__form' style={formDisplay !== 'Cartao' ? { display: 'none' } : {}}>
                     <div className='lista'>
                         <h2 className='main__form__titulo'>Cartões: </h2>
@@ -540,6 +556,9 @@ export default function Client() {
                         <button className='botao__guardar' onClick={evento => submitFormCard(evento)}>Guardar</button>
                         <button className='botao__excluir' style={cartoes[cartaoAtual].id_card === null ? { display: 'none' } : {}} onClick={evento => excluirCard(evento, cartoes[cartaoAtual].id_card)}>Inativar</button>
                     </div>
+                </form>
+                <form className='main__form' style={formDisplay !== 'Transacao' ? { display: 'none' } : {}}>
+                    <h2 className='main__form__titulo'>Transações: </h2>
                 </form>
             </>}
         </main>

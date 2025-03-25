@@ -34,12 +34,27 @@ app.get("/produtos", (req, res) => {
     });
 });
 
+app.get("/produtosI", (req, res) => {
+    con.query("SELECT * FROM `produto` WHERE situacao_prod = 'I'", function (err, result, fields) {
+        if (err) throw err;
+        res.send(result);
+    });
+});
+
 app.put("/produtos/:id", (req, res) => {
     const {nome} = req.body;
     const {valor} = req.body;
     const {imagem} = req.body;
     const {id} = req.params;
     con.query(`UPDATE produto SET nome_prod = '${nome}', valor_prod = '${valor}', imagem_prod = '${imagem}' WHERE id_prod = '${id}'`, function (err, result, fields) {
+        if (err) throw err;
+        res.send(result);
+    });
+});
+
+app.put("/produtosI/:id", (req, res) => {
+    const {id} = req.params;
+    con.query(`UPDATE produto SET situacao_prod = 'A' WHERE id_prod = '${id}'`, function (err, result, fields) {
         if (err) throw err;
         res.send(result);
     });
@@ -77,8 +92,9 @@ app.put("/cliente/:id", (req, res) => {
     const {email} = req.body;
     const {nascimento} = req.body;
     const {cpf} = req.body;
+    const {senha} = req.body;
     const {id} = req.params;
-    con.query(`UPDATE cliente SET nome_cliente = '${nome}', email_cliente = '${email}', nasc_cliente = '${nascimento}', CPF_cliente = '${cpf}' WHERE id_cliente = '${id}'`, function (err, result, fields) {
+    con.query(`UPDATE cliente SET nome_cliente = '${nome}', email_cliente = '${email}', nasc_cliente = '${nascimento}', CPF_cliente = '${cpf}', senha = '${senha}' WHERE id_cliente = '${id}'`, function (err, result, fields) {
         if (err) throw err;
         res.send(result);
     });
