@@ -427,8 +427,8 @@ export default function Client() {
     return (
         <main className='main'>
             {!formControl && <div className='main__form__botoes'>
-                <button className='botao__guardar' onClick={evento => jaSouCliente(evento)}>Já sou cliente</button>
-                <button className='botao__limpar' onClick={() => setFormControl(true)}>Cadastrar</button>
+                <button className='botao__guardar' id='btn-jasoucliente' onClick={evento => jaSouCliente(evento)}>Já sou cliente</button>
+                <button className='botao__limpar' id='btn-newcliente' onClick={() => setFormControl(true)}>Cadastrar</button>
             </div>}
             {formControl &&
                 <div className="sidebar" id="sidebar">
@@ -503,8 +503,8 @@ export default function Client() {
                     </div>
 
                     <div className='main__form__botoes'>
-                        <button className='botao__guardar' onClick={evento => submitForm(evento)}>Guardar</button>
-                        {!isClient ? <button className='botao__limpar' onClick={evento => limparForm(evento)}>Limpar</button> : <button className='botao__excluir' onClick={evento => excluirCliente(evento, cliente.id_cliente)}>Inativar</button>}
+                        <button className='botao__guardar' id='guardar-cliente' onClick={evento => submitForm(evento)}>Guardar</button>
+                        {!isClient ? <button className='botao__limpar' onClick={evento => limparForm(evento)}>Limpar</button> : <button className='botao__excluir' id='desativar-cliente' onClick={evento => excluirCliente(evento, cliente.id_cliente)}>Inativar</button>}
                     </div>
                 </form>
                 <form className='main__form' style={formDisplay !== 'Senha' ? { display: 'none' } : {}}>
