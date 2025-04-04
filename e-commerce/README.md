@@ -1,3 +1,8 @@
 Projeto de e-commerce.
 
-Consumindo dados do arquivo db.json que simula a busca em uma API externa, usado json-server.
+Projeto de Engenharia de software, fazer um e-commerce completo com todas as funcionalidades padrão
+ - Cadastro de usuário;
+ - Produtos;
+ - Carrinho;
+ - Compra, venda, devolução;
+ - Gerenciamento de estoque;
