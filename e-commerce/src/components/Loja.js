@@ -326,6 +326,35 @@ export default function Loja() {
         else return 0;
     }
 
+    // COMPRA
+    const submitedCompra = async (e) => {
+        e.preventDefault();
+        await insereVenda(carrinho);
+        alert(`COMPRA REALIZADA!`)
+        togglePopupEndereco();
+        togglePopupPagamento();
+        limparCarrinho(e);
+    }
+
+    const insereVenda = async (produtos) => {
+        const conexao = await fetch("http://localhost:3001/venda", {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json"
+            },
+            body: JSON.stringify({
+                id_card: cartoes[cartaoAtual].id_card,
+                id_end: enderecos[enderecoAtual].id_end,
+                cupons: `${cumpomPromo} - ${cumpomTroca}`,
+                total: totalCarrinho.toFixed(2),
+                frete: valorFrete,
+                produtos: produtos,
+                id_cliente: localStorage.getItem('cliente')
+            })
+        });
+        if (!conexao.ok) throw new Error("Não foi possível guardar os dados da venda.");
+    }
+
     return (
         <main className='main'>
             {isOpenEndereco && (
@@ -419,7 +448,7 @@ export default function Loja() {
                         </div>
                         <h3>💰 Total da compra: R$ {formatarMoeda(totalCarrinho + valorFrete - calculaCupons())}</h3>
                         <button style={cartaoAtual !== 0 ? { opacity: '0.6', cursor: 'not-allowed' } : {}} onClick={(evento) => submitFormCard(evento)}>✅ Salvar Novo</button>
-                        <button style={cartaoAtual === 0 ? { opacity: '0.6', cursor: 'not-allowed' } : {}} onClick={(e) => alert('Finalizar a compra!!!')}>💰 Finalizar</button>
+                        <button style={cartaoAtual === 0 ? { opacity: '0.6', cursor: 'not-allowed' } : {}} onClick={(e) => submitedCompra(e)}>💰 Finalizar</button>
                         <button onClick={togglePopupPagamento}>❌ Fechar</button>
                     </div>
                 </div>

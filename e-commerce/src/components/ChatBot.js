@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import "../styles/ChatBot.css";
 import { FaGreaterThan, FaHeart, FaCommentsDollar } from "react-icons/fa";
 
@@ -23,7 +23,6 @@ export default function ChatBot() {
 
                 });
             }
-            FirstBotMessage()
         }
         Start();
     }, []);
@@ -139,7 +138,7 @@ No Atacadão, o "Café Brasileiro Tradicional Stand Pack" de 500 g é oferecido 
     function GetResponse() {
         let userText = document.getElementById("textInput").value;
 
-        if (userText == "") {
+        if (userText === "") {
             userText = "Por favor digite um nome válido";
         }
         const p = document.createElement("p");
@@ -198,7 +197,7 @@ No Atacadão, o "Café Brasileiro Tradicional Stand Pack" de 500 g é oferecido 
                             <div className="chat-container">
                                 {/* <!-- Messages --> */}
                                 <div id="chatbox">
-                                    <h5 id="chat-timestamp"></h5>
+                                    <h5 id="chat-timestamp">A</h5>
                                     <p id="botStarterMessage" className="botText"><span>Carregando...</span></p>
                                 </div>
                                 {/* 

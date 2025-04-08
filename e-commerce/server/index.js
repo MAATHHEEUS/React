@@ -217,3 +217,33 @@ app.delete("/cartao/:id", (req, res) => {
         res.send(result);
     });
 });
+
+// VENDA
+app.post("/venda", (req, res) => {
+    const {id_card} = req.body;
+    const {id_end} = req.body;
+    const {cupons} = req.body;
+    const {total} = req.body;
+    const {frete} = req.body;
+    const {id_cliente} = req.body;
+    const {produtos} = req.body;
+    
+    con.query(`INSERT INTO venda(id_card_ven, id_end_ven, cupons_ven, total_ven, frete_ven, id_cliente_ven, status_ven) VALUES ('${id_card}','${id_end}','${cupons}','${total}','${frete}', '${id_cliente}', 'EM PROCESSAMENTO')`, function (err, result) {
+        if (err) throw err;
+        res.send(result);
+
+        insereProdutosVenda(result.insertId, produtos);
+    });
+});
+
+function insereProdutosVenda(id_venda, produtos) {
+    var values = [];
+    produtos.forEach(prod => {
+        values.push([id_venda, prod.id_prod, prod.quantidade])
+    })
+    
+    var sql = "INSERT INTO vendaproduto (id_ven_vdp, id_prod_vdp, quantidade_vdp) VALUES ?";
+    con.query(sql, [values], function (err) {
+        if (err) throw err;
+    });
+}
