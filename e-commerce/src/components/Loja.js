@@ -2,8 +2,11 @@ import React, { useState, useEffect } from 'react';
 import Card from './CardLoja.js'
 import "../styles/main.css";
 import "../styles/popup.css";
+import Icons from './Icons.js';
 
 export default function Loja() {
+
+    const [isClient, setIsClient] = useState(true);
 
     const [produtos, setProdutos] = useState([]);
     const [carrinho, setCarrinho] = useState([]);
@@ -318,6 +321,7 @@ export default function Loja() {
 
     const [cumpomTroca, setCupomTroca] = useState('');
     const [cumpomPromo, setCupomPromo] = useState('');
+    const [showCupons, setShowCupons] = useState(false);
 
     // Função para calcular o desconto com os cupons
     const calculaCupons = () => {
@@ -330,29 +334,37 @@ export default function Loja() {
     const submitedCompra = async (e) => {
         e.preventDefault();
         await insereVenda(carrinho);
-        alert(`COMPRA REALIZADA!`)
         togglePopupEndereco();
         togglePopupPagamento();
         limparCarrinho(e);
     }
 
     const insereVenda = async (produtos) => {
-        const conexao = await fetch("http://localhost:3001/venda", {
-            method: "POST",
-            headers: {
-                "Content-type": "application/json"
-            },
-            body: JSON.stringify({
-                id_card: cartoes[cartaoAtual].id_card,
-                id_end: enderecos[enderecoAtual].id_end,
-                cupons: `${cumpomPromo} - ${cumpomTroca}`,
-                total: totalCarrinho.toFixed(2),
-                frete: valorFrete,
-                produtos: produtos,
-                id_cliente: localStorage.getItem('cliente')
-            })
-        });
-        if (!conexao.ok) throw new Error("Não foi possível guardar os dados da venda.");
+        try {
+            const conexao = await fetch("http://localhost:3001/venda", {
+                method: "POST",
+                headers: {
+                    "Content-type": "application/json"
+                },
+                body: JSON.stringify({
+                    id_card: cartoes[cartaoAtual].id_card,
+                    id_end: enderecos[enderecoAtual].id_end,
+                    cupons: `${cumpomPromo} - ${cumpomTroca}`,
+                    total: totalCarrinho.toFixed(2),
+                    frete: valorFrete,
+                    produtos: produtos,
+                    id_cliente: localStorage.getItem('cliente')
+                })
+            });
+            if (!conexao.ok) {
+                throw new Error("Não foi possível guardar os dados da venda.");
+            }
+        
+            const json = await conexao.json();
+            alert(`COMPRA REALIZADA!\nCódigo da compra: ${json.insertId}`);
+          } catch (error) {
+            console.error(error.message);
+          }
     }
 
     return (
@@ -364,35 +376,35 @@ export default function Loja() {
                         {montaEnderecos()}
                         <div className='input_label'>
                             <label>identificação...</label>
-                            <input name='identificacao_end' id='identificacao' type='text' placeholder='casa, trabalho...' onChange={onChangeEnd} value={endereco.identificacao_end}></input>
+                            <input name='identificacao_end' id='identificacao' type='text' style={enderecoAtual !== 0 ? { opacity: '0.6', cursor: 'not-allowed' } : {}} placeholder='casa, trabalho...' onChange={onChangeEnd} value={endereco.identificacao_end}></input>
                         </div>
                         <div className='input_label'>
                             <label>tipo...</label>
-                            <input name='tipo' id='tipo' type='text' placeholder='cobrança ou entrega' onChange={onChangeEnd} value={endereco.tipo}></input>
+                            <input name='tipo' id='tipo' type='text' style={enderecoAtual !== 0 ? { opacity: '0.6', cursor: 'not-allowed' } : {}} placeholder='cobrança ou entrega' onChange={onChangeEnd} value={endereco.tipo}></input>
                         </div>
                         <div className='input_label'>
                             <label>cep...</label>
-                            <input name='cep_end' id='cep' type='text' placeholder='000-00000' onChange={onChangeEnd} value={endereco.cep_end}></input>
+                            <input name='cep_end' id='cep' type='text' style={enderecoAtual !== 0 ? { opacity: '0.6', cursor: 'not-allowed' } : {}} placeholder='000-00000' onChange={onChangeEnd} value={endereco.cep_end}></input>
                         </div>
                         <div className='input_label'>
                             <label>rua...</label>
-                            <input name='rua_end' id='rua' type='text' placeholder='Rua x' onChange={onChangeEnd} value={endereco.rua_end}></input>
+                            <input name='rua_end' id='rua' type='text' style={enderecoAtual !== 0 ? { opacity: '0.6', cursor: 'not-allowed' } : {}} placeholder='Rua x' onChange={onChangeEnd} value={endereco.rua_end}></input>
                         </div>
                         <div className='input_label'>
                             <label>número...</label>
-                            <input name='numero_end' id='numero' type='text' placeholder='00' onChange={onChangeEnd} value={endereco.numero_end}></input>
+                            <input name='numero_end' id='numero' type='text' style={enderecoAtual !== 0 ? { opacity: '0.6', cursor: 'not-allowed' } : {}} placeholder='00' onChange={onChangeEnd} value={endereco.numero_end}></input>
                         </div>
                         <div className='input_label'>
                             <label>bairro...</label>
-                            <input name='bairro_end' id='bairro' type='text' placeholder='Jardim Azul' onChange={onChangeEnd} value={endereco.bairro_end}></input>
+                            <input name='bairro_end' id='bairro' type='text' style={enderecoAtual !== 0 ? { opacity: '0.6', cursor: 'not-allowed' } : {}} placeholder='Jardim Azul' onChange={onChangeEnd} value={endereco.bairro_end}></input>
                         </div>
                         <div className='input_label'>
                             <label>cidade...</label>
-                            <input name='cidade' id='cidade' type='text' placeholder='Cidade' onChange={onChangeEnd} value={endereco.cidade}></input>
+                            <input name='cidade' id='cidade' type='text' style={enderecoAtual !== 0 ? { opacity: '0.6', cursor: 'not-allowed' } : {}} placeholder='Cidade' onChange={onChangeEnd} value={endereco.cidade}></input>
                         </div>
                         <div className='input_label'>
                             <label>estado/UF...</label>
-                            <input name='UF' id='uf' type='text' placeholder='SP' onChange={onChangeEnd} value={endereco.UF}></input>
+                            <input name='UF' id='uf' type='text' style={enderecoAtual !== 0 ? { opacity: '0.6', cursor: 'not-allowed' } : {}} placeholder='SP' onChange={onChangeEnd} value={endereco.UF}></input>
                         </div>
                         <div className='input_label'>
                             <label>frete...</label>
@@ -412,44 +424,47 @@ export default function Loja() {
                         {montaCartoes()}
                         <div className='input_label'>
                             <label>identificação...</label>
-                            <input name='identificacao_card' id='identificacao_card' type='text' placeholder='Meu cartão' onChange={onChangeCard} value={cartao.identificacao_card}></input>
+                            <input name='identificacao_card' id='identificacao_card' style={cartaoAtual !== 0 ? { opacity: '0.6', cursor: 'not-allowed' } : {}} type='text' placeholder='Meu cartão' onChange={onChangeCard} value={cartao.identificacao_card}></input>
                         </div>
                         <div className='input_label'>
                             <label>nome...</label>
-                            <input name='nome_card' id='nome_card' type='text' placeholder='nome impresso no cartão' onChange={onChangeCard} value={cartao.nome_card}></input>
+                            <input name='nome_card' id='nome_card' type='text' style={cartaoAtual !== 0 ? { opacity: '0.6', cursor: 'not-allowed' } : {}} placeholder='nome impresso no cartão' onChange={onChangeCard} value={cartao.nome_card}></input>
                         </div>
                         <div className='input_label'>
                             <label>data de vencimento...</label>
-                            <input name='vencimento_card' id='vencimento' type='text' placeholder='mm/aaaa' onChange={onChangeCard} value={cartao.vencimento_card}></input>
+                            <input name='vencimento_card' id='vencimento' type='text' style={cartaoAtual !== 0 ? { opacity: '0.6', cursor: 'not-allowed' } : {}} placeholder='mm/aaaa' onChange={onChangeCard} value={cartao.vencimento_card}></input>
                         </div>
                         <div className='input_label'>
                             <label>número...</label>
-                            <input name='numero_card' id='numero_card' type='text' placeholder='0000.0000.0000.0000' onChange={onChangeCard} value={cartao.numero_card}></input>
+                            <input name='numero_card' id='numero_card' type='text' style={cartaoAtual !== 0 ? { opacity: '0.6', cursor: 'not-allowed' } : {}} placeholder='0000.0000.0000.0000' onChange={onChangeCard} value={cartao.numero_card}></input>
                         </div>
                         <div className='input_label'>
                             <label>CVV...</label>
-                            <input name='cvv_card' id='cvv_card' type='text' placeholder='000' onChange={onChangeCard} value={cartao.cvv_card}></input>
+                            <input name='cvv_card' id='cvv_card' type='text' style={cartaoAtual !== 0 ? { opacity: '0.6', cursor: 'not-allowed' } : {}} placeholder='000' onChange={onChangeCard} value={cartao.cvv_card}></input>
                         </div>
                         <div className='input_label'>
                             <label>bandeira...</label>
-                            <input name='bandeira_card' id='bandeira_card' type='text' placeholder='Visa, MasterCard...' onChange={onChangeCard} value={cartao.bandeira_card}></input>
+                            <input name='bandeira_card' id='bandeira_card' type='text' style={cartaoAtual !== 0 ? { opacity: '0.6', cursor: 'not-allowed' } : {}} placeholder='Visa, MasterCard...' onChange={onChangeCard} value={cartao.bandeira_card}></input>
                         </div>
                         <div className='input_label'>
                             <label>tipo...</label>
-                            <input name='tipo_card' id='tipo_card' type='text' placeholder='Preferencial ou secundário' onChange={onChangeCard} value={cartao.tipo_card}></input>
-                        </div>
-                        <div className='input_label'>
-                            <label>cupom de troca...</label>
-                            <input name='troca' id='troca' type='text' placeholder='CPTROCA' onChange={(e) => setCupomTroca(e.target.value)} value={cumpomTroca}></input>
-                        </div>
-                        <div className='input_label'>
-                            <label>cupom promocional...</label>
-                            <input name='promocional' id='promocional' type='text' placeholder='BLACKFRIDAY' onChange={(e) => setCupomPromo(e.target.value)} value={cumpomPromo}></input>
+                            <input name='tipo_card' id='tipo_card' type='text' style={cartaoAtual !== 0 ? { opacity: '0.6', cursor: 'not-allowed' } : {}} placeholder='Preferencial ou secundário' onChange={onChangeCard} value={cartao.tipo_card}></input>
                         </div>
                         <h3>💰 Total da compra: R$ {formatarMoeda(totalCarrinho + valorFrete - calculaCupons())}</h3>
                         <button style={cartaoAtual !== 0 ? { opacity: '0.6', cursor: 'not-allowed' } : {}} onClick={(evento) => submitFormCard(evento)}>✅ Salvar Novo</button>
                         <button style={cartaoAtual === 0 ? { opacity: '0.6', cursor: 'not-allowed' } : {}} onClick={(e) => submitedCompra(e)}>💰 Finalizar</button>
                         <button onClick={togglePopupPagamento}>❌ Fechar</button>
+                        <div><button onClick={() => setShowCupons(!showCupons)}>🔖 Adicionar Cupons</button></div>
+                        <div className='input_label' style={!showCupons ? { display: 'none' } : { display: 'flex' }}>
+                            <div className='input_label'>
+                                <label>cupom de troca...</label>
+                                <input name='troca' id='troca' type='text' placeholder='CPTROCA' onChange={(e) => setCupomTroca(e.target.value)} value={cumpomTroca}></input>
+                            </div>
+                            <div className='input_label'>
+                                <label>cupom promocional...</label>
+                                <input name='promocional' id='promocional' type='text' placeholder='BLACKFRIDAY' onChange={(e) => setCupomPromo(e.target.value)} value={cumpomPromo}></input>
+                            </div>
+                        </div>
                     </div>
                 </div>
             )}
@@ -482,6 +497,7 @@ export default function Loja() {
                     <button className='botao__limpar' style={carrinho.length === 0 ? { opacity: '0.6', cursor: 'not-allowed' } : {}} onClick={evento => limparCarrinho(evento)}>Limpar Carrinho</button>
                 </div>
             </form>
+            <Icons isClient={isClient} setIsClient={() => setIsClient()}/>
         </main>
     )
 }

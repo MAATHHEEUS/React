@@ -1,14 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import "../styles/client.css";
+import Icons from './Icons.js';
 
 export default function Client() {
 
     const navigate = useNavigate();
 
+    // 🎯 Função para formatar valores em reais (R$)
+    const formatarMoeda = (valor) => {
+        return new Intl.NumberFormat("pt-BR", {
+            style: "currency",
+            currency: "BRL",
+        }).format(valor);
+    };
+
     // CONTROLE //
-    const [isClient, setIsClient] = useState(false);
-    const [formControl, setFormControl] = useState(false);
+    const [isClient, setIsClient] = useState(localStorage.getItem('cliente') !== null ? true : false);
+    const [formControl, setFormControl] = useState(localStorage.getItem('cliente') !== null ? true : false);
     const [formDisplay, setFormDisplay] = useState("Cliente");
 
     const limparForm = (evento) => {
@@ -124,6 +133,16 @@ export default function Client() {
         }
     }
 
+    useEffect(() => {
+        const funcaoAuxiliar = async () => {
+            if (localStorage.getItem('cliente') !== null) {
+                await buscaCliente(localStorage.getItem('cliente'));
+            }
+        };
+
+        funcaoAuxiliar();
+    }, []);
+
     const [cliente, setCliente] = useState({
         CPF_cliente: "",
         situacao_cliente: "",
@@ -152,6 +171,7 @@ export default function Client() {
         setIsClient(true);
         buscaEnderecos(cliente.id_cliente);
         buscaCartoes(cliente.id_cliente);
+        buscaTransacoes(cliente.id_cliente);
     }
 
     // ENDEREÇOS //
@@ -424,6 +444,133 @@ export default function Client() {
         setCartao((prev) => ({ ...prev, [name]: value }));
     }
 
+    // TRANSAÇÕES
+    const [Transacoes, setTransacoes] = useState([{
+        id_venda: "",
+        id_cliente: "",
+        endereco: "",
+        cartao: "",
+        cupons: "",
+        total: "",
+        frete: "",
+        status: "",
+        produtos: [],
+    }]);
+
+    async function buscaTransacoes(id_cliente) {
+        try {
+            const conexao = await fetch(`http://localhost:3001/transacao/${id_cliente}`);
+            if (!conexao.ok) throw new Error("Não foi possível acessar API com os Transacoes.");
+            else {
+                const conexaoConvertida = conexao.json();
+                conexaoConvertida.then(res => {
+                    setTransacoes(res);
+                });
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const [linhasAbertas, setLinhasAbertas] = useState([]);
+    const toggleLinha = (id) => {
+        setLinhasAbertas(prev =>
+            prev.includes(id)
+                ? prev.filter(i => i !== id)
+                : [...prev, id]
+        );
+    };
+
+    const thStyle = {
+        border: '1px solid #ccc',
+        padding: '8px',
+        backgroundColor: '#ddd'
+    };
+
+    function montaTransacoes() {
+        const tdStyle = {
+            border: '1px solid #ccc',
+            padding: '8px'
+        };
+
+        const ulStyle = {
+            listStyle: 'none',
+            padding: 0,
+            margin: 0
+        };
+
+        const liStyle = {
+            padding: '8px',
+            marginBottom: '6px',
+            border: '1px solid #ccc',
+            borderRadius: '4px',
+            backgroundColor: '#fff',
+            boxShadow: '0 1px 2px rgba(0,0,0,0.05)'
+        };
+
+        return Transacoes.map((item, index) => (
+            <React.Fragment key={item.id_venda}>
+                <tr
+                    onClick={() => toggleLinha(item.id_venda)}
+                    style={{ cursor: 'pointer', backgroundColor: '#f0f0f0' }}
+                >
+                    <td style={tdStyle}>{item.id_venda}</td>
+                    <td style={tdStyle}>{item.endereco}</td>
+                    <td style={tdStyle}>{item.cartao}</td>
+                    <td style={tdStyle}>{item.cupons}</td>
+                    <td style={tdStyle}>{formatarMoeda(item.total)}</td>
+                    <td style={tdStyle}>{formatarMoeda(item.frete)}</td>
+                    <td style={tdStyle}>{item.status}</td>
+                </tr>
+                {linhasAbertas.includes(item.id_venda) && (
+                    <tr style={{ backgroundColor: '#fafafa' }}>
+                        <td colSpan="2" style={{ ...tdStyle, paddingLeft: '20px' }}>
+                            <ul style={ulStyle}>
+                                {item.produtos.map((produto, idx) => (
+                                    <li
+                                        style={liStyle}
+                                        className={`item_lista`}
+                                        key={idx}>
+                                        {`${produto.nome} - R$ ${produto.preco} - ${produto.quantidade}`}
+                                        {produto.status_vdp !== 'EM TRANSITO' && !produto.status_vdp.includes('TROCA') ?
+                                            <span onClick={() => trocarProduto(produto.id_vdp, produto.quantidade, item.id_venda)} title="Trocar produto">
+                                                <svg className="svg-button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                                    <path d="M4 7h12l-1.41-1.41L16 4l4 4-4 4-1.41-1.41L16 9H4V7zm16 10H8l1.41 1.41L8 20l-4-4 4-4 1.41 1.41L8 15h12v2z" />
+                                                </svg>
+                                            </span> : <></>}
+                                    </li>
+                                ))}
+                            </ul>
+                        </td>
+                    </tr>
+                )}
+            </React.Fragment>
+        ))
+    }
+
+    const trocarProduto = async (id, quantidade, venda) => {
+        const troca = prompt(`Deseja trocar quantos produtos?\nQuantidade comprada: ${quantidade}`);
+        if (troca > quantidade) {
+            alert("Impossível trocar quantidade maior que a quantidade comprada.\nTENTE NOVAMENTE!");
+        }
+        else {
+            if (window.confirm("Tem certeza que deseja trocar o produto?")) {
+                const conexao = await fetch(`http://localhost:3001/troca/${id}`, {
+                    method: "PUT",
+                    headers: {
+                        "Content-type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        quantidade: troca,
+                        venda: venda
+                    })
+                });
+                if (!conexao.ok) throw new Error("Não foi possível guardar os dados da venda.");
+                window.location.reload();
+            }
+        }
+    }
+
     return (
         <main className='main'>
             {!formControl && <div className='main__form__botoes'>
@@ -559,8 +706,25 @@ export default function Client() {
                 </form>
                 <form className='main__form' style={formDisplay !== 'Transacao' ? { display: 'none' } : {}}>
                     <h2 className='main__form__titulo'>Transações: </h2>
+                    <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                        <thead>
+                            <tr>
+                                <th style={thStyle}>Compra</th>
+                                <th style={thStyle}>Endereço</th>
+                                <th style={thStyle}>Cartão</th>
+                                <th style={thStyle}>Cupons Usados</th>
+                                <th style={thStyle}>Total</th>
+                                <th style={thStyle}>Frete</th>
+                                <th style={thStyle}>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {montaTransacoes()}
+                        </tbody>
+                    </table>
                 </form>
             </>}
+            <Icons isClient={isClient} setIsClient={() => setIsClient()} />
         </main>
     )
 }

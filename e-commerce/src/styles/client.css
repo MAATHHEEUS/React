@@ -46,7 +46,8 @@
     line-height: 1.3rem;
 }
 
-.form__input, .form__input_end {
+.form__input,
+.form__input_end {
     outline: none;
     border: none;
     line-height: 1.2em;
@@ -109,7 +110,7 @@
 }
 
 @media (min-width: 840px) {
-    .main{
+    .main {
         flex-direction: row;
     }
 }
@@ -122,9 +123,11 @@
     padding: 20px;
     transition: width 0.3s;
 }
+
 .sidebar.collapsed {
     width: 60px;
 }
+
 .sidebar button {
     background: none;
     border: none;
@@ -132,12 +135,15 @@
     cursor: pointer;
     margin-bottom: 20px;
 }
+
 .menu-item {
     padding: 10px;
     cursor: pointer;
     border-radius: 5px;
 }
-.menu-item:hover, .menu-item.active {
+
+.menu-item:hover,
+.menu-item.active {
     background-color: #555;
 }
 
@@ -149,4 +155,15 @@
 .item_lista {
     cursor: pointer;
     color: blueviolet;
+}
+
+.svg-button {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    transition: fill 0.2s ease;
+}
+
+.svg-button:hover {
+    fill: #0056b3;
 }

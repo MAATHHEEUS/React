@@ -6,6 +6,7 @@ export default function Main() {
 
     const [produtos, setProdutos] = useState([]);
     const [produtosInativos, setProdutosInativos] = useState([]);
+    const [formDisplay, setFormDisplay] = useState("Produtos");
 
     // Estado para a pesquisa
     const [pesquisa, setPesquisa] = useState('');
@@ -68,6 +69,7 @@ export default function Main() {
                     conexaoConvertida.then(res => {
                         setProdutos(res);
                     });
+                    buscaVendas(-1)
                 }
             } catch (error) {
                 console.log(error);
@@ -159,9 +161,187 @@ export default function Main() {
         else window.location.reload();
     }
 
+    function toggleMenu() {
+        document.getElementById('sidebar').classList.toggle('collapsed');
+    }
+
+    function showContent(event, section) {
+        setFormDisplay(section);
+        document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
+        event.target.classList.add('active');
+    }
+
+    // VENDAS
+    const [Vendas, setVendas] = useState([{
+        id_venda: "",
+        id_cliente: "",
+        endereco: "",
+        cartao: "",
+        cupons: "",
+        total: "",
+        frete: "",
+        status: "",
+        produtos: [],
+    }]);
+
+    // Estado para a pesquisa
+    const [pesquisaVendas, setPesquisaVendas] = useState('');
+
+    // Função para lidar com a pesquisa
+    const handlePesquisaVendas = (e) => {
+        setPesquisaVendas(e.target.value);
+    };
+
+    // Filtra os vendas com base na pesquisa
+    const vendasFiltradas = Vendas.filter((venda) =>
+        venda.status.toLowerCase().includes(pesquisaVendas.toLowerCase()) || venda.cupons.toLowerCase().includes(pesquisaVendas.toLowerCase())
+    );
+
+    async function buscaVendas(id_cliente) {
+        try {
+            const conexao = await fetch(`http://localhost:3001/transacao/${id_cliente}`);
+            if (!conexao.ok) throw new Error("Não foi possível acessar API com os Vendas.");
+            else {
+                const conexaoConvertida = conexao.json();
+                conexaoConvertida.then(res => {
+                    setVendas(res);
+                    console.log(res);
+                });
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const [linhasAbertas, setLinhasAbertas] = useState([]);
+    const toggleLinha = (id) => {
+        setLinhasAbertas(prev =>
+            prev.includes(id)
+                ? prev.filter(i => i !== id)
+                : [...prev, id]
+        );
+    };
+
+    const thStyle = {
+        border: '1px solid #ccc',
+        padding: '8px',
+        backgroundColor: '#ddd'
+    };
+
+    // 🎯 Função para formatar valores em reais (R$)
+    const formatarMoeda = (valor) => {
+        return new Intl.NumberFormat("pt-BR", {
+            style: "currency",
+            currency: "BRL",
+        }).format(valor);
+    };
+
+    function montaVendas() {
+        const tdStyle = {
+            border: '1px solid #ccc',
+            padding: '8px'
+        };
+
+        const ulStyle = {
+            listStyle: 'none',
+            padding: 0,
+            margin: 0
+        };
+
+        const liStyle = {
+            padding: '8px',
+            marginBottom: '6px',
+            border: '1px solid #ccc',
+            borderRadius: '4px',
+            backgroundColor: '#fff',
+            boxShadow: '0 1px 2px rgba(0,0,0,0.05)'
+        };
+
+
+        return vendasFiltradas.map((item, index) => (
+            <React.Fragment key={item.id_venda}>
+                <tr
+                    onClick={() => toggleLinha(item.id_venda)}
+                    style={{ cursor: 'pointer', backgroundColor: '#f0f0f0' }}
+                >
+                    <td style={tdStyle}>{item.id_venda}</td>
+                    <td style={tdStyle}>{item.endereco}</td>
+                    <td style={tdStyle}>{item.cartao}</td>
+                    <td style={tdStyle}>{item.cupons}</td>
+                    <td style={tdStyle}>{formatarMoeda(item.total)}</td>
+                    <td style={tdStyle}>{formatarMoeda(item.frete)}</td>
+                    <td style={tdStyle}>{item.status}</td>
+                </tr>
+                {linhasAbertas.includes(item.id_venda) && (
+                    <tr style={{ backgroundColor: '#fafafa' }}>
+                        <td colSpan="2" style={{ ...tdStyle, paddingLeft: '20px' }}>
+                            <ul style={ulStyle}>
+                                {item.produtos.map((produto, idx) => (
+                                    <li
+                                        style={liStyle}
+                                        className={`item_lista`}
+                                        key={idx}>
+                                        {`${produto.nome} - R$ ${produto.preco} - ${produto.quantidade}`}
+                                        {produto.status_vdp === 'EM PROCESSAMENTO' ?
+                                            <span onClick={() => trocarStatus(produto.id_vdp, "EM TRANSITO", item.id_venda)} title="Enviar pedido">
+                                                <svg className="svg-button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                                    <path d="M3 13V6a1 1 0 011-1h11a1 1 0 011 1v7h2.6a1 1 0 01.7.3l2.4 2.4a1 1 0 01.3.7V18a1 1 0 01-1 1h-1a2 2 0 01-4 0H8a2 2 0 01-4 0H3a1 1 0 01-1-1v-1a1 1 0 011-1h1" />
+                                                </svg>
+                                            </span> : <></>}
+                                        {produto.status_vdp === 'EM TRANSITO' ?
+                                            <span onClick={() => trocarStatus(produto.id_vdp, "ENTREGUE", item.id_venda)} title="Confirmar entrega">
+                                                <svg className="svg-button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                                    <path d="M3 7l9-4 9 4v10l-9 4-9-4V7z M9 12l2 2 4-4" />
+                                                </svg>
+                                            </span> : <></>}
+                                        {produto.status_vdp.includes('TROCA') && produto.status_vdp !== 'TROCA AUTORIZADA' ?
+                                            <span onClick={() => trocarStatus(produto.id_vdp, "TROCA AUTORIZADA", item.id_venda)} title="Autorizar troca">
+                                                <svg className="svg-button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                                    <path d="M4 7h12l-1.41-1.41L16 4l4 4-4 4-1.41-1.41L16 9H4V7zm16 10H8l1.41 1.41L8 20l-4-4 4-4 1.41 1.41L8 15h12v2z" />
+                                                </svg>
+                                            </span> : <></>}
+                                        {produto.status_vdp === 'TROCA AUTORIZADA' ?
+                                            <span onClick={() => alert('Gerar cupons e confirmar recebimento')} title="Confirmar recebimento e gerar cupons">
+                                                <svg className="svg-button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                                    <path d="M5 3h10l4 4v12a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2zm7 10l2 2 4-4M7 8h6" />
+                                                </svg>
+                                            </span> : <></>}
+                                    </li>
+                                ))}
+                            </ul>
+                        </td>
+                    </tr>
+                )}
+            </React.Fragment>
+        ))
+    }
+
+    const trocarStatus = async (id, status, venda) => {
+        if (window.confirm("Tem certeza que deseja trocar o status dessa venda?")) {
+            const conexao = await fetch(`http://localhost:3001/trocastatus`, {
+                method: "PUT",
+                headers: {
+                    "Content-type": "application/json"
+                },
+                body: JSON.stringify({
+                    vdp: id,
+                    status: status,
+                    venda: venda
+                })
+            });
+            if (!conexao.ok) throw new Error("Não foi possível guardar os dados da venda.");
+            window.location.reload();
+        }
+    }
+
     return (
         <main className='main'>
-            <section className='main__products'>
+            <div className="sidebar" id="sidebar">
+                <button onClick={() => toggleMenu()}>☰</button>
+                <div className="menu-item" onClick={evento => showContent(evento, 'Produtos')}>🛍️ Produtos</div>
+                <div className="menu-item" onClick={evento => showContent(evento, 'Vendas')}>🔄 Vendas</div>
+            </div>
+            <section className='main__products' style={formDisplay !== 'Produtos' ? { display: 'none' } : {}}>
                 <input
                     type="text"
                     placeholder="Pesquisar produtos"
@@ -181,7 +361,7 @@ export default function Main() {
                     )}
                 </div>
             </section>
-            <form className='main__form'>
+            <form className='main__form' style={formDisplay !== 'Produtos' ? { display: 'none' } : {}}>
                 <h2 className='main__form__titulo'>Adicionar Produtos:</h2>
                 <input className='form__input' id='id_prod' type='hidden'></input>
                 <div className='main__form__input'>
@@ -200,6 +380,31 @@ export default function Main() {
                     <button className='botao__guardar' onClick={evento => submitForm(evento)}>Guardar</button>
                     <button className='botao__limpar' onClick={evento => limparForm(evento)}>Limpar</button>
                 </div>
+            </form>
+            <form className='main__form' style={formDisplay !== 'Vendas' ? { display: 'none' } : {}}>
+                <h2 className='main__form__titulo'>Vendas: </h2>
+                <input
+                    type="text"
+                    placeholder="Pesquisar vendas"
+                    value={pesquisaVendas}
+                    onChange={handlePesquisaVendas}
+                />
+                <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                    <thead>
+                        <tr>
+                            <th style={thStyle}>Compra</th>
+                            <th style={thStyle}>Endereço</th>
+                            <th style={thStyle}>Cartão</th>
+                            <th style={thStyle}>Cupons Usados</th>
+                            <th style={thStyle}>Total</th>
+                            <th style={thStyle}>Frete</th>
+                            <th style={thStyle}>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {montaVendas()}
+                    </tbody>
+                </table>
             </form>
         </main>
     )
