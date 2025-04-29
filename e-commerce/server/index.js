@@ -17,6 +17,16 @@ con.connect(function (err) {
     console.log("Db Connected!");
 });
 
+function gerarCodigoAleatorio() {
+    const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let codigo = '';
+    for (let i = 0; i < 4; i++) {
+        const indice = Math.floor(Math.random() * caracteres.length);
+        codigo += caracteres[indice];
+    }
+    return codigo;
+}
+
 // Requests
 const app = express();
 app.use(cors());
@@ -46,7 +56,8 @@ app.put("/produtos/:id", (req, res) => {
     const { valor } = req.body;
     const { imagem } = req.body;
     const { id } = req.params;
-    con.query(`UPDATE produto SET nome_prod = '${nome}', valor_prod = '${valor}', imagem_prod = '${imagem}' WHERE id_prod = '${id}'`, function (err, result, fields) {
+    const { estoque } = req.body;
+    con.query(`UPDATE produto SET nome_prod = '${nome}', valor_prod = '${valor}', imagem_prod = '${imagem}', estoque_prod = '${estoque}' WHERE id_prod = '${id}'`, function (err, result, fields) {
         if (err) throw err;
         res.send(result);
     });
@@ -64,7 +75,8 @@ app.post("/produtos", (req, res) => {
     const { nome } = req.body;
     const { valor } = req.body;
     const { imagem } = req.body;
-    con.query(`INSERT INTO produto (nome_prod, valor_prod, imagem_prod) VALUES ('${nome}', '${valor}', '${imagem}')`, function (err, result) {
+    const { estoque } = req.body;
+    con.query(`INSERT INTO produto (nome_prod, valor_prod, imagem_prod, estoque_prod) VALUES ('${nome}', '${valor}', '${imagem}', '${estoque}')`, function (err, result) {
         if (err) throw err;
         res.send(result);
     });
@@ -223,6 +235,7 @@ app.post("/venda", (req, res) => {
     const { id_card } = req.body;
     const { id_end } = req.body;
     const { cupons } = req.body;
+    let ct = cupons.split('/')[1].trim();
     const { total } = req.body;
     const { frete } = req.body;
     const { id_cliente } = req.body;
@@ -233,13 +246,15 @@ app.post("/venda", (req, res) => {
         res.send(result);
 
         insereProdutosVenda(result.insertId, produtos);
+        alteraCupom(ct);
     });
 });
 
 function insereProdutosVenda(id_venda, produtos) {
     var values = [];
     produtos.forEach(prod => {
-        values.push([id_venda, prod.id_prod, prod.quantidade, 'EM PROCESSAMENTO'])
+        values.push([id_venda, prod.id_prod, prod.quantidade, 'EM PROCESSAMENTO']);
+        decrementaEstoque(prod.id_prod, prod.quantidade);
     })
 
     var sql = "INSERT INTO vendaproduto (id_ven_vdp, id_prod_vdp, quantidade_vdp, status_vdp) VALUES ?";
@@ -275,7 +290,7 @@ JOIN PRODUTO P ON VP.ID_PROD_VDP = P.ID_PROD
         result.forEach(reg => {
             const index = retorno.findIndex(item => item.id_venda === reg.ID_VEN);
             if (index !== -1) {
-                retorno[index].produtos.push({ id_vdp: reg.ID_VDP,  status_vdp: reg.STATUS_VDP, quantidade: reg.QUANTIDADE_VDP, nome: reg.NOME_PROD, preco: reg.VALOR_PROD });
+                retorno[index].produtos.push({ id_vdp: reg.ID_VDP, status_vdp: reg.STATUS_VDP, quantidade: reg.QUANTIDADE_VDP, nome: reg.NOME_PROD, preco: reg.VALOR_PROD });
             }
             else {
                 let trans = {
@@ -312,10 +327,74 @@ app.put("/trocastatus", (req, res) => {
     const { status } = req.body;
     const { venda } = req.body;
     const { vdp } = req.body;
+    const { estoque } = req.body;
+
+    if (status.includes("TROCA AUTORIZADA") && estoque === 'S') {
+        con.query(`SELECT id_prod_vdp, quantidade_vdp FROM vendaproduto WHERE id_vdp = '${vdp}'`, function (err, result) {
+            incrementaEstoque(result[0].id_prod_vdp, Number(status.replace("TROCA AUTORIZADA", "")));
+        });
+    }
+
+    res.send(alteraVendaProduto(vdp, status));
+
+    alteraStatusVenda(venda, status);
+});
+
+function alteraVendaProduto(vdp, status) {
     con.query(`UPDATE vendaproduto SET status_vdp = '${status}' WHERE id_vdp = '${vdp}'`, function (err, result, fields) {
         if (err) throw err;
-        res.send(result);
+        return result;
+    });
+}
 
+// CUPONS
+app.post("/gerarcupom", (req, res) => {
+    const { cliente } = req.body;
+    const { preco } = req.body;
+    const { status } = req.body;
+    const { venda } = req.body;
+    const { vdp } = req.body;
+    const cod = `CT-${cliente}#${gerarCodigoAleatorio()}`;
+    con.query(`INSERT INTO cupons(cod_cupom, id_cli_cupom, valor_cupom, status_cupom) VALUES ('${cod}','${cliente}','${preco}','A')`, function (err, result) {
+        if (err) throw err;
+        res.send(result);
+        alteraVendaProduto(vdp, status);
         alteraStatusVenda(venda, status);
     });
 });
+
+app.get("/cupons/:id_cliente", (req, res) => {
+    const { id_cliente } = req.params;
+    let where = '';
+    id_cliente === '-1' ? where = `` : where = `WHERE c.ID_CLI_cupom = ${id_cliente} AND c.status_cupom = 'A'`;
+    con.query(`SELECT c.id_cupom, c.cod_cupom, c.valor_cupom, c.status_cupom, cli.nome_cliente 
+ FROM cupons c JOIN cliente cli ON c.id_cli_cupom = cli.id_cliente
+ ${where}
+        `, function (err, result, fields) {
+        if (err) throw err;
+        res.send(result);
+    });
+});
+
+function alteraCupom(cupom) {
+    con.query(`UPDATE cupons SET status_cupom = 'I' WHERE cod_cupom = '${cupom}'`, function (err, result, fields) {
+        if (err) throw err;
+    });
+}
+
+// ESTOQUE
+function decrementaEstoque(produtoId, quantidade) {
+    con.query(`UPDATE produto SET estoque_prod = estoque_prod - '${quantidade}', situacao_prod = CASE
+    WHEN estoque_prod - '${quantidade}' <= 0 THEN 'I'
+    ELSE 'A'
+END
+ WHERE id_prod = '${produtoId}'`, function (err, result, fields) {
+        if (err) throw err;
+    });
+}
+
+function incrementaEstoque(produtoId, quantidade) {
+    con.query(`UPDATE produto SET estoque_prod = estoque_prod + '${quantidade}', situacao_prod = 'A' WHERE id_prod = '${produtoId}'`, function (err, result, fields) {
+        if (err) throw err;
+    });
+}

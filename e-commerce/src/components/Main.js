@@ -26,18 +26,19 @@ export default function Main() {
         return <div className='main__products__container'>
             {
                 produtosFiltrados.map(
-                    produto => <Card key={produto.id_prod} id={produto.id_prod} nome={produto.nome_prod} preco={produto.valor_prod} img={produto.imagem_prod} funcaoClick={evento => excluirProduto(evento, produto.id_prod)} funcaoEdit={evento => preencheInputs(evento, produto.id_prod, produto.nome_prod, produto.valor_prod, produto.imagem_prod)} />
+                    produto => <Card key={produto.id_prod} id={produto.id_prod} nome={produto.nome_prod} preco={produto.valor_prod} img={produto.imagem_prod} estoque={produto.estoque_prod} funcaoClick={evento => excluirProduto(evento, produto.id_prod)} funcaoEdit={evento => preencheInputs(evento, produto.id_prod, produto.nome_prod, produto.valor_prod, produto.imagem_prod, produto.estoque_prod)} />
                 )
             }
         </div>
     }
 
-    const preencheInputs = (evento, id, nome, valor, imagem) => {
+    const preencheInputs = (evento, id, nome, valor, imagem, estoque) => {
         evento.preventDefault();
         document.getElementById("id_prod").value = id;
         document.getElementById("descricao").value = nome;
         document.getElementById("valor").value = valor;
         document.getElementById("imagem").value = imagem;
+        document.getElementById("estoque").value = estoque;
     }
 
     const excluirProduto = async (evento, id) => {
@@ -69,7 +70,8 @@ export default function Main() {
                     conexaoConvertida.then(res => {
                         setProdutos(res);
                     });
-                    buscaVendas(-1)
+                    buscaVendas(-1);
+                    buscaCupons(-1);
                 }
             } catch (error) {
                 console.log(error);
@@ -93,9 +95,10 @@ export default function Main() {
         const descricao = document.getElementById("descricao").value;
         const valor = document.getElementById("valor").value;
         const imagem = document.getElementById("imagem").value;
+        const estoque = document.getElementById("estoque").value;
 
         try {
-            id === "" ? await criarProduto(descricao, valor, imagem) : await atualizaProduto(id, descricao, valor, imagem);
+            id === "" ? await criarProduto(descricao, valor, imagem, estoque) : await atualizaProduto(id, descricao, valor, imagem, estoque);
             alert('Produto guardado com sucesso.');
             window.location.reload();
         } catch (error) {
@@ -119,7 +122,7 @@ export default function Main() {
         }
     }
 
-    async function criarProduto(nome, valor, imagem) {
+    async function criarProduto(nome, valor, imagem, estoque) {
         const conexao = await fetch("http://localhost:3001/produtos", {
             method: "POST",
             headers: {
@@ -128,13 +131,14 @@ export default function Main() {
             body: JSON.stringify({
                 nome: nome,
                 valor: valor,
-                imagem: imagem
+                imagem: imagem,
+                estoque
             })
         });
         if (!conexao.ok) throw new Error("Não foi possível guardar o produto.");
     }
 
-    async function atualizaProduto(id, nome, valor, imagem) {
+    async function atualizaProduto(id, nome, valor, imagem, estoque) {
         const conexao = await fetch(`http://localhost:3001/produtos/${id}`, {
             method: "PUT",
             headers: {
@@ -143,7 +147,8 @@ export default function Main() {
             body: JSON.stringify({
                 nome: nome,
                 valor: valor,
-                imagem: imagem
+                imagem: imagem,
+                estoque
             })
         });
         if (!conexao.ok) throw new Error("Não foi possível guardar o produto.");
@@ -205,7 +210,6 @@ export default function Main() {
                 const conexaoConvertida = conexao.json();
                 conexaoConvertida.then(res => {
                     setVendas(res);
-                    console.log(res);
                 });
             }
         } catch (error) {
@@ -294,14 +298,14 @@ export default function Main() {
                                                     <path d="M3 7l9-4 9 4v10l-9 4-9-4V7z M9 12l2 2 4-4" />
                                                 </svg>
                                             </span> : <></>}
-                                        {produto.status_vdp.includes('TROCA') && produto.status_vdp !== 'TROCA AUTORIZADA' ?
-                                            <span onClick={() => trocarStatus(produto.id_vdp, "TROCA AUTORIZADA", item.id_venda)} title="Autorizar troca">
+                                        {produto.status_vdp.includes('TROCA') && !produto.status_vdp.includes("TROCA AUTORIZADA") ?
+                                            <span onClick={() => trocarStatus(produto.id_vdp, `TROCA AUTORIZADA${produto.status_vdp.replace("TROCA", "")}`, item.id_venda)} title="Autorizar troca">
                                                 <svg className="svg-button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                                                     <path d="M4 7h12l-1.41-1.41L16 4l4 4-4 4-1.41-1.41L16 9H4V7zm16 10H8l1.41 1.41L8 20l-4-4 4-4 1.41 1.41L8 15h12v2z" />
                                                 </svg>
                                             </span> : <></>}
-                                        {produto.status_vdp === 'TROCA AUTORIZADA' ?
-                                            <span onClick={() => alert('Gerar cupons e confirmar recebimento')} title="Confirmar recebimento e gerar cupons">
+                                        {produto.status_vdp.includes("TROCA AUTORIZADA") ?
+                                            <span onClick={() => gerarCupom(item.id_cliente, Number(produto.preco.replace(",", ".")) * Number(produto.status_vdp.replace("TROCA AUTORIZADA", "")), produto.id_vdp, item.id_venda)} title="Confirmar recebimento e gerar cupom.">
                                                 <svg className="svg-button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                                                     <path d="M5 3h10l4 4v12a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2zm7 10l2 2 4-4M7 8h6" />
                                                 </svg>
@@ -317,6 +321,10 @@ export default function Main() {
     }
 
     const trocarStatus = async (id, status, venda) => {
+        let estoque = 'N';
+        if(status.includes("TROCA AUTORIZADA")) {
+            if(window.confirm("O produto deve voltar para o estoque?")) estoque = 'S';
+        }
         if (window.confirm("Tem certeza que deseja trocar o status dessa venda?")) {
             const conexao = await fetch(`http://localhost:3001/trocastatus`, {
                 method: "PUT",
@@ -326,12 +334,75 @@ export default function Main() {
                 body: JSON.stringify({
                     vdp: id,
                     status: status,
-                    venda: venda
+                    venda: venda,
+                    estoque: estoque
                 })
             });
             if (!conexao.ok) throw new Error("Não foi possível guardar os dados da venda.");
             window.location.reload();
         }
+    }
+
+    // CUPONS
+    const gerarCupom = async (idCliente, preco, id_vdp, venda) => {
+        if (window.confirm("Tem certeza que deseja gerar um cupom para essa venda?")) {
+            const conexao = await fetch(`http://localhost:3001/gerarcupom`, {
+                method: "POST",
+                headers: {
+                    "Content-type": "application/json"
+                },
+                body: JSON.stringify({
+                    cliente: idCliente,
+                    preco: preco.toFixed(2),
+                    vdp: id_vdp,
+                    status: "CUPOM GERADO",
+                    venda: venda
+                })
+            });
+            if (!conexao.ok) throw new Error("Não foi possível guardar os dados do cupom.");
+            window.location.reload();
+        }
+    }
+
+    const [cupons, setCupons] = useState([{
+        id_cupom: "",
+        cliente: "",
+        valor_cupom: "",
+        status_cupom: "",
+        cod_cupom: ""
+    }]);
+
+    async function buscaCupons(id_cliente) {
+        try {
+            const conexao = await fetch(`http://localhost:3001/cupons/${id_cliente}`);
+            if (!conexao.ok) throw new Error("Não foi possível acessar API com os Cupons.");
+            else {
+                const conexaoConvertida = conexao.json();
+                conexaoConvertida.then(res => {
+                    setCupons(res);
+                });
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const montaCupons = () => {
+        const tdStyle = {
+            border: '1px solid #ccc',
+            padding: '8px'
+        };
+
+        return cupons.map((item) => (
+            <React.Fragment key={item.id_cupom}>
+                <tr>
+                    <td style={tdStyle}>{item.id_cupom}</td>
+                    <td style={tdStyle}>{item.cod_cupom}</td>
+                    <td style={tdStyle}>{item.nome_cliente}</td>
+                    <td style={tdStyle}>{item.status_cupom}</td>
+                    <td style={tdStyle}>{item.valor_cupom}</td>
+                </tr>
+            </React.Fragment>));
     }
 
     return (
@@ -340,6 +411,7 @@ export default function Main() {
                 <button onClick={() => toggleMenu()}>☰</button>
                 <div className="menu-item" onClick={evento => showContent(evento, 'Produtos')}>🛍️ Produtos</div>
                 <div className="menu-item" onClick={evento => showContent(evento, 'Vendas')}>🔄 Vendas</div>
+                <div className="menu-item" onClick={evento => showContent(evento, 'Cupons')}>🎟️ Cupons</div>
             </div>
             <section className='main__products' style={formDisplay !== 'Produtos' ? { display: 'none' } : {}}>
                 <input
@@ -376,6 +448,10 @@ export default function Main() {
                     <label className='input__label'>imagem...</label>
                     <input className='form__input' id='imagem' type='text' placeholder='url online'></input>
                 </div>
+                <div className='main__form__input'>
+                    <label className='input__label'>estoque...</label>
+                    <input className='form__input' id='estoque' type='text' placeholder='estoque'></input>
+                </div>
                 <div className='main__form__botoes'>
                     <button className='botao__guardar' onClick={evento => submitForm(evento)}>Guardar</button>
                     <button className='botao__limpar' onClick={evento => limparForm(evento)}>Limpar</button>
@@ -403,6 +479,23 @@ export default function Main() {
                     </thead>
                     <tbody>
                         {montaVendas()}
+                    </tbody>
+                </table>
+            </form>
+            <form className='main__form' style={formDisplay !== 'Cupons' ? { display: 'none' } : {}}>
+                <h2 className='main__form__titulo'>Cupons: </h2>
+                <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                    <thead>
+                        <tr>
+                            <th style={thStyle}>#</th>
+                            <th style={thStyle}>Código</th>
+                            <th style={thStyle}>Cliente</th>
+                            <th style={thStyle}>Status</th>
+                            <th style={thStyle}>Valor</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {montaCupons()}
                     </tbody>
                 </table>
             </form>

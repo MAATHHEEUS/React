@@ -21,6 +21,7 @@ export default function Loja() {
                     conexaoConvertida.then(res => {
                         setProdutos(res);
                     });
+                    buscaCupons(localStorage.getItem('cliente'));
                 }
             } catch (error) {
                 console.log(error);
@@ -31,6 +32,11 @@ export default function Loja() {
 
     // 🎯 Função para formatar valores em reais (R$)
     const formatarMoeda = (valor) => {
+        if(valor < 0) return new Intl.NumberFormat("pt-BR", {
+            style: "currency",
+            currency: "BRL",
+        }).format(0);
+        else 
         return new Intl.NumberFormat("pt-BR", {
             style: "currency",
             currency: "BRL",
@@ -58,7 +64,7 @@ export default function Loja() {
         return <div className='main__products__container'>
             {
                 produtosFiltrados.map(
-                    produto => <Card key={produto.id_prod} id={produto.id_prod} nome={produto.nome_prod} preco={produto.valor_prod} img={produto.imagem_prod} funcaoClick={evento => adicionarAoCarrinho(evento, produto)} />
+                    produto => produto.estoque_prod > 0 && <Card key={produto.id_prod} id={produto.id_prod} nome={produto.nome_prod} preco={produto.valor_prod} img={produto.imagem_prod} estoque={produto.estoque_prod} funcaoClick={evento => adicionarAoCarrinho(evento, produto)} />
                 )
             }
         </div>
@@ -70,6 +76,10 @@ export default function Loja() {
             const produtoExiste = prevCarrinho.find((item) => item.id_prod === produto.id_prod);
 
             if (produtoExiste) {
+                if (produtoExiste.quantidade >= produto.estoque_prod) {
+                    alert("Que pena estamos sem estoque!\nQuantidade máxima atingida para este produto.");
+                    return prevCarrinho; // Não adiciona mais
+                }
                 return prevCarrinho.map((item) =>
                     item.id_prod === produto.id_prod ? { ...item, quantidade: item.quantidade + 1 } : item
                 );
@@ -325,8 +335,10 @@ export default function Loja() {
 
     // Função para calcular o desconto com os cupons
     const calculaCupons = () => {
-        if (cumpomTroca.includes("CP") && cumpomPromo.includes("FRIDAY")) return 20;
-        if (cumpomTroca.includes("CP") || cumpomPromo.includes("FRIDAY")) return 10;
+        let indexCT = cupons.findIndex(cupom => cupom.cod_cupom === cumpomTroca);
+        if (indexCT !== -1 && cumpomPromo.includes("FRIDAY")) return Number(cupons[indexCT].valor_cupom.replace(',', '.')) + 10;
+        if (indexCT !== -1) return Number(cupons[indexCT].valor_cupom.replace(',', '.'));
+        if (cumpomPromo.includes("FRIDAY")) return 10;
         else return 0;
     }
 
@@ -337,6 +349,7 @@ export default function Loja() {
         togglePopupEndereco();
         togglePopupPagamento();
         limparCarrinho(e);
+        window.location.reload();
     }
 
     const insereVenda = async (produtos) => {
@@ -349,7 +362,7 @@ export default function Loja() {
                 body: JSON.stringify({
                     id_card: cartoes[cartaoAtual].id_card,
                     id_end: enderecos[enderecoAtual].id_end,
-                    cupons: `${cumpomPromo} - ${cumpomTroca}`,
+                    cupons: `${cumpomPromo} / ${cumpomTroca}`,
                     total: totalCarrinho.toFixed(2),
                     frete: valorFrete,
                     produtos: produtos,
@@ -359,12 +372,36 @@ export default function Loja() {
             if (!conexao.ok) {
                 throw new Error("Não foi possível guardar os dados da venda.");
             }
-        
+
             const json = await conexao.json();
             alert(`COMPRA REALIZADA!\nCódigo da compra: ${json.insertId}`);
-          } catch (error) {
+        } catch (error) {
             console.error(error.message);
-          }
+        }
+    }
+
+    // CUPONS
+    const [cupons, setCupons] = useState([{
+        id_cupom: "",
+        cliente: "",
+        valor_cupom: "",
+        status_cupom: "",
+        cod_cupom: ""
+    }]);
+
+    async function buscaCupons(id_cliente) {
+        try {
+            const conexao = await fetch(`http://localhost:3001/cupons/${id_cliente}`);
+            if (!conexao.ok) throw new Error("Não foi possível acessar API com os Cupons.");
+            else {
+                const conexaoConvertida = conexao.json();
+                conexaoConvertida.then(res => {
+                    setCupons(res);
+                });
+            }
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     return (
@@ -497,7 +534,7 @@ export default function Loja() {
                     <button className='botao__limpar' style={carrinho.length === 0 ? { opacity: '0.6', cursor: 'not-allowed' } : {}} onClick={evento => limparCarrinho(evento)}>Limpar Carrinho</button>
                 </div>
             </form>
-            <Icons isClient={isClient} setIsClient={() => setIsClient()}/>
+            <Icons isClient={isClient} setIsClient={() => setIsClient()} />
         </main>
     )
 }

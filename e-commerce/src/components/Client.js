@@ -172,6 +172,7 @@ export default function Client() {
         buscaEnderecos(cliente.id_cliente);
         buscaCartoes(cliente.id_cliente);
         buscaTransacoes(cliente.id_cliente);
+        buscaCupons(cliente.id_cliente)
     }
 
     // ENDEREÇOS //
@@ -532,7 +533,7 @@ export default function Client() {
                                         className={`item_lista`}
                                         key={idx}>
                                         {`${produto.nome} - R$ ${produto.preco} - ${produto.quantidade}`}
-                                        {produto.status_vdp !== 'EM TRANSITO' && !produto.status_vdp.includes('TROCA') ?
+                                        {produto.status_vdp !== 'EM TRANSITO' && (!produto.status_vdp.includes('TROCA') && !produto.status_vdp.includes('CUPOM')) ?
                                             <span onClick={() => trocarProduto(produto.id_vdp, produto.quantidade, item.id_venda)} title="Trocar produto">
                                                 <svg className="svg-button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                                                     <path d="M4 7h12l-1.41-1.41L16 4l4 4-4 4-1.41-1.41L16 9H4V7zm16 10H8l1.41 1.41L8 20l-4-4 4-4 1.41 1.41L8 15h12v2z" />
@@ -571,6 +572,45 @@ export default function Client() {
         }
     }
 
+    // CUPONS
+    const [cupons, setCupons] = useState([{
+        id_cupom: "",
+        cliente: "",
+        valor_cupom: "",
+        status_cupom: "",
+        cod_cupom: ""
+    }]);
+
+    async function buscaCupons(id_cliente) {
+        try {
+            const conexao = await fetch(`http://localhost:3001/cupons/${id_cliente}`);
+            if (!conexao.ok) throw new Error("Não foi possível acessar API com os Cupons.");
+            else {
+                const conexaoConvertida = conexao.json();
+                conexaoConvertida.then(res => {
+                    setCupons(res);
+                });
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const montaCupons = () => {
+        const tdStyle = {
+            border: '1px solid #ccc',
+            padding: '8px'
+        };
+
+        return cupons.map((item) => (
+            <React.Fragment key={item.id_cupom}>
+                <tr>
+                    <td style={tdStyle}>{item.cod_cupom}</td>
+                    <td style={tdStyle}>{item.valor_cupom}</td>
+                </tr>
+            </React.Fragment>));
+    }
+
     return (
         <main className='main'>
             {!formControl && <div className='main__form__botoes'>
@@ -585,6 +625,7 @@ export default function Client() {
                     <div className="menu-item" style={!isClient ? { opacity: '0.6', cursor: 'not-allowed' } : {}} onClick={evento => showContent(evento, 'Endereco')}>📍 Endereços</div>
                     <div className="menu-item" style={!isClient ? { opacity: '0.6', cursor: 'not-allowed' } : {}} onClick={evento => showContent(evento, 'Cartao')}>💳 Cartões</div>
                     <div className="menu-item" style={!isClient ? { opacity: '0.6', cursor: 'not-allowed' } : {}} onClick={evento => showContent(evento, 'Transacao')}>🔄 Transações</div>
+                    <div className="menu-item" style={!isClient ? { opacity: '0.6', cursor: 'not-allowed' } : {}} onClick={evento => showContent(evento, 'Cupons')}>🎟️ Cupons</div>
                     <div className="menu-item" style={!isClient ? { opacity: '0.6', cursor: 'not-allowed', marginTop: '15px' } : { marginTop: '55px' }} onClick={() => navigate('/loja')}>🛍️ Loja</div>
                 </div>}
             {formControl && <>
@@ -720,6 +761,20 @@ export default function Client() {
                         </thead>
                         <tbody>
                             {montaTransacoes()}
+                        </tbody>
+                    </table>
+                </form>
+                <form className='main__form' style={formDisplay !== 'Cupons' ? { display: 'none' } : {}}>
+                    <h2 className='main__form__titulo'>Cupons: </h2>
+                    <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                        <thead>
+                            <tr>
+                                <th style={thStyle}>Código</th>
+                                <th style={thStyle}>Valor</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {montaCupons()}
                         </tbody>
                     </table>
                 </form>

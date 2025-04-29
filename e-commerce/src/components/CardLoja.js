@@ -12,6 +12,7 @@ export default function CardLoja(props) {
                     <p>$ {props.preco}</p>
                     <img src={iconePlus} alt="Ícone de Editar" onClick={props.funcaoClick}/>
                 </div>
+                <p>Disponível: {props.estoque}</p>
             </div>
         </div>
     )

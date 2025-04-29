@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Tempo de geração: 08/04/2025 às 15:21
+-- Tempo de geração: 29/04/2025 às 18:26
 -- Versão do servidor: 9.1.0
 -- Versão do PHP: 8.3.14
 
@@ -66,7 +66,7 @@ CREATE TABLE IF NOT EXISTS `cliente` (
   `CPF_cliente` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `telefone_cliente` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `situacao_cliente` varchar(5) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'A',
-  `senha` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `senha` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   PRIMARY KEY (`id_cliente`)
 ) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -78,6 +78,32 @@ INSERT INTO `cliente` (`id_cliente`, `nome_cliente`, `email_cliente`, `nasc_clie
 (1, 'User alterado 2', 'email1@email', '1999-01-15', '75546644411', NULL, 'A', '666'),
 (5, 'Nome', 'emaiteste@teste', '1999-06-15', '16551615616', NULL, 'I', '555'),
 (6, 'nda editado', 'X@email', '1995-06-15', '3424234243242', NULL, 'A', '123');
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `cupons`
+--
+
+DROP TABLE IF EXISTS `cupons`;
+CREATE TABLE IF NOT EXISTS `cupons` (
+  `id_cupom` int NOT NULL AUTO_INCREMENT,
+  `cod_cupom` varchar(30) COLLATE utf8mb4_general_ci NOT NULL,
+  `id_cli_cupom` int NOT NULL,
+  `valor_cupom` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `status_cupom` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  PRIMARY KEY (`id_cupom`)
+) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Despejando dados para a tabela `cupons`
+--
+
+INSERT INTO `cupons` (`id_cupom`, `cod_cupom`, `id_cli_cupom`, `valor_cupom`, `status_cupom`) VALUES
+(6, 'CT-1#eLkq', 1, '14,99', 'I'),
+(5, 'CT-1#VCIG', 1, '2,00', 'I'),
+(4, 'CT-1#s69k', 1, '14,99', 'I'),
+(9, 'CT-1#DIP9', 1, '298.56', 'A');
 
 -- --------------------------------------------------------
 
@@ -126,6 +152,7 @@ CREATE TABLE IF NOT EXISTS `produto` (
   `valor_prod` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `imagem_prod` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `situacao_prod` varchar(5) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'A',
+  `estoque_prod` int DEFAULT NULL,
   PRIMARY KEY (`id_prod`)
 ) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -133,10 +160,10 @@ CREATE TABLE IF NOT EXISTS `produto` (
 -- Despejando dados para a tabela `produto`
 --
 
-INSERT INTO `produto` (`id_prod`, `nome_prod`, `valor_prod`, `imagem_prod`, `situacao_prod`) VALUES
-(1, 'Produto 2 xxxxx yyyyyyy zzzzzzzzz', '14,99', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQils_lNi36_g5x_Jceh0DMhh0IDoYWc_vSZdUUuoiaBg&s', 'A'),
-(4, 'Produto', '2,00', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQils_lNi36_g5x_Jceh0DMhh0IDoYWc_vSZdUUuoiaBg&s', 'A'),
-(5, 'Oi', '99,52', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQils_lNi36_g5x_Jceh0DMhh0IDoYWc_vSZdUUuoiaBg&s', 'A');
+INSERT INTO `produto` (`id_prod`, `nome_prod`, `valor_prod`, `imagem_prod`, `situacao_prod`, `estoque_prod`) VALUES
+(1, 'Produto 2 xxxxx yyyyyyy zzzzzzzzz', '14,99', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQils_lNi36_g5x_Jceh0DMhh0IDoYWc_vSZdUUuoiaBg&s', 'A', 10),
+(4, 'Produto', '2,00', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQils_lNi36_g5x_Jceh0DMhh0IDoYWc_vSZdUUuoiaBg&s', 'A', 10),
+(5, 'Oi', '99,52', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQils_lNi36_g5x_Jceh0DMhh0IDoYWc_vSZdUUuoiaBg&s', 'A', 3);
 
 -- --------------------------------------------------------
 
@@ -155,7 +182,20 @@ CREATE TABLE IF NOT EXISTS `venda` (
   `frete_ven` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
   `status_ven` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
   PRIMARY KEY (`id_ven`)
-) ENGINE=MyISAM AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=46 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Despejando dados para a tabela `venda`
+--
+
+INSERT INTO `venda` (`id_ven`, `id_cliente_ven`, `id_end_ven`, `id_card_ven`, `cupons_ven`, `total_ven`, `frete_ven`, `status_ven`) VALUES
+(45, 1, 19, 3, ' / ', '10.00', '12.96', 'EM PROCESSAMENTO'),
+(44, 1, 19, 3, ' / ', '10.00', '12.96', 'EM PROCESSAMENTO'),
+(43, 1, 19, 3, 'BLFRIDAY / CT-1#s69k', '298.56', '12.96', 'CUPOM GERADO'),
+(41, 1, 19, 3, ' / CT-1#VCIG', '14.99', '12.96', 'CUPOM GERADO'),
+(42, 1, 19, 3, ' / CT-1#eLkq', '2.00', '12.96', 'EM TRANSITO'),
+(37, 1, 19, 3, 'BLACK FRIDAY - CP', '16.99', '12.96', 'CUPOM GERADO'),
+(36, 1, 19, 3, 'BLACK FRIDAY - CP', '4.00', '12.96', 'CUPOM GERADO');
 
 -- --------------------------------------------------------
 
@@ -169,12 +209,25 @@ CREATE TABLE IF NOT EXISTS `vendaproduto` (
   `id_ven_vdp` int NOT NULL,
   `id_prod_vdp` int NOT NULL,
   `quantidade_vdp` int NOT NULL,
+  `status_vdp` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
   PRIMARY KEY (`id_vdp`)
-) ENGINE=MyISAM AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=41 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Despejando dados para a tabela `vendaproduto`
+--
+
+INSERT INTO `vendaproduto` (`id_vdp`, `id_ven_vdp`, `id_prod_vdp`, `quantidade_vdp`, `status_vdp`) VALUES
+(32, 37, 1, 1, 'CUPOM GERADO'),
+(31, 37, 4, 1, 'CUPOM GERADO'),
+(30, 36, 4, 2, 'CUPOM GERADO'),
+(37, 42, 4, 1, 'EM TRANSITO'),
+(36, 41, 1, 1, 'CUPOM GERADO'),
+(38, 43, 5, 3, 'CUPOM GERADO'),
+(39, 44, 4, 5, 'EM PROCESSAMENTO'),
+(40, 45, 4, 5, 'EM PROCESSAMENTO');
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-
-ALTER TABLE `vendaproduto` ADD `status_vdp` VARCHAR(50) NULL AFTER `quantidade_vdp`; 

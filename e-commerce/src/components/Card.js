@@ -14,6 +14,7 @@ export default function Card(props) {
                     <img src={iconeEdit} alt="Ícone de Editar" onClick={props.funcaoEdit}/>
                     <img src={iconeDelete} alt="Ícone de deletar" onClick={props.funcaoClick}/>
                 </div>
+                <p>Estoque: {props.estoque}</p>
             </div>
         </div>
     )
