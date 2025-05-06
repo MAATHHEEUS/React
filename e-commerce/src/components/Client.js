@@ -69,8 +69,6 @@ export default function Client() {
 
         try {
             isClient ? await atualizaCliente(cliente.id_cliente, nome, email, nascimento, cpf, senha) : await criarCliente(nome, email, nascimento, cpf);
-            alert('Dados guardados com sucesso.');
-            window.location.reload();
         } catch (error) {
             alert(error);
         }
@@ -90,23 +88,57 @@ export default function Client() {
             })
         });
         if (!conexao.ok) throw new Error("Não foi possível guardar os dados do cliente.");
+        else {
+            alert('Dados guardados com sucesso.');
+            window.location.reload();
+        }
     }
 
     async function atualizaCliente(id, nome, email, nascimento, cpf, senha) {
-        const conexao = await fetch(`http://localhost:3001/cliente/${id}`, {
-            method: "PUT",
-            headers: {
-                "Content-type": "application/json"
-            },
-            body: JSON.stringify({
-                nome: nome,
-                email: email,
-                nascimento: nascimento,
-                cpf: cpf,
-                senha: senha
-            })
-        });
-        if (!conexao.ok) throw new Error("Não foi possível guardar os dados do cliente.");
+        if (validarSenha(senha)) {
+            const conexao = await fetch(`http://localhost:3001/cliente/${id}`, {
+                method: "PUT",
+                headers: {
+                    "Content-type": "application/json"
+                },
+                body: JSON.stringify({
+                    nome: nome,
+                    email: email,
+                    nascimento: nascimento,
+                    cpf: cpf,
+                    senha: senha
+                })
+            });
+            if (!conexao.ok) throw new Error("Não foi possível guardar os dados do cliente.");
+            else {
+                alert('Dados guardados com sucesso.');
+                window.location.reload();
+            }
+        }
+    }
+
+    function validarSenha(senha) {
+        const senhaConfirma = document.getElementById("senha_confirma").value;
+        if (senha !== senhaConfirma) {
+            alert("Senhas não são iguais.");
+            return false;
+        }
+        if (senha.length < 8) {
+            alert("Senha deve conter mínimo 8 caracteres.");
+            return false;
+        }
+        const temCaracterEspecial = /[^a-zA-Z0-9]/.test(senha);
+        if (!temCaracterEspecial) {
+            alert("Senha deve conter no mínimo 1 caracter especial. Ex.: @#$%;");
+            return false;
+        }
+        const temMaiuscula = /[A-Z]/.test(senha);
+        const temMinuscula = /[a-z]/.test(senha);
+        if (!temMaiuscula || !temMinuscula) {
+            alert("Senha deve conter letras maiúsculas e minúsculas");
+            return false;
+        }
+        return true;
     }
 
     async function jaSouCliente(evento) {
@@ -699,9 +731,18 @@ export default function Client() {
                     {!isClient ? <h2 className='main__form__titulo'>Cadastro de senha:</h2> : <h2 className='main__form__titulo'>Edição de senha:</h2>}
                     <div className='main__form__input'>
                         <label className='input__label'>senha...</label>
-                        <input className='form__input' id='senha' type='password' onChange={onChange} defaultValue={cliente.senha}></input>
+                        <input className='form__input' id='senha' type='password' minLength={8} onChange={onChange} defaultValue={cliente.senha}></input>
                     </div>
-
+                    <div className='main__form__input'>
+                        <label className='input__label'>confirmar senha...</label>
+                        <input className='form__input' id='senha_confirma' type='password' minLength={8} onChange={onChange} defaultValue={cliente.senha}></input>
+                    </div>
+                    <div className='main__form__info'>
+                        <p>ℹ️ A senha deve conter:</p>
+                        <p>Mínimo 8 caracteres</p>
+                        <p>Ter letras maiúsculas e minúsculas</p>
+                        <p>Pelo menos 1 caracter especial</p>
+                    </div>
                     <div className='main__form__botoes'>
                         <button className='botao__guardar' onClick={evento => submitForm(evento)}>Guardar</button>
                     </div>

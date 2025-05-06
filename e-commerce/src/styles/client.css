@@ -63,6 +63,12 @@
     width: 21.8rem;
 }
 
+.main__form__info p{
+    font-size: 12px;
+    color: red;
+    padding: 5px;
+}
+
 .botao__guardar {
     cursor: pointer;
     background-color: blue;

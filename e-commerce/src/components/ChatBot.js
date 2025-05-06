@@ -20,7 +20,7 @@ export default function ChatBot() {
                     } else {
                         content.style.maxHeight = content.scrollHeight + "px";
                     }
-
+                    FirstBotMessage();
                 });
             }
         }
@@ -45,48 +45,43 @@ export default function ChatBot() {
         });
     }
 
-    function GetBotResponse(input) {
+    async function GetBotResponse(input) {
         const inputUpper = String(input).toUpperCase();
-        if (inputUpper.includes('AJUDA')) {
-            return "Para pedir ajuda entre na aba do menu superior 'Ajuda' e entre em contato conosco!";
-        } else if (inputUpper.includes('OLÁ') || inputUpper.includes('OI') || inputUpper.includes('EAI')) {
+        if (inputUpper.includes('OLÁ') || inputUpper.includes('OI') || inputUpper.includes('EAI')) {
             return "Olá, como posso ajudar?";
-        } else if (inputUpper.includes('EU SOU O REI DA VÁRZEA')) {
-            return "Parabéns! Continue Arrebentando.";
         } else {
-            // Salva a pergunta para colocar nos perguntas frequentes
-            SalvaPergunta(inputUpper);
-            return `Em São Paulo, por exemplo, o preço de um pacote de 500 g pode variar entre R$ 20,99 e R$ 21,99. 
-NOTICIAS.R7.COM
+            try {
+                const conexao = await fetch(`http://localhost:3001/BOT/${localStorage.getItem('cliente')}`, {
+                    method: "POST",
+                    headers: {
+                        "Content-type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        pergunta: inputUpper
+                    })
+                });
+                if (!conexao.ok) throw new Error("Não foi possível acessar API de IA.");
+                else {
+                    const conexaoConvertida = conexao.json();
+                    conexaoConvertida.then(res => {
+                        console.log('res');
+                        // const p = document.createElement("p");
+                        // p.classList.add("botText");
 
-No Pão de Açúcar, o "Café Torrado e Moído Tradicional Café Brasileiro" de 500 g está disponível por R$ 20,99. 
-PAODEACUCAR.COM
+                        // const span = document.createElement("span");
+                        // const text = document.createTextNode(`Res ${res[0].id_end}`);
+                        // span.appendChild(text)
 
-No Atacadão, o "Café Brasileiro Tradicional Stand Pack" de 500 g é oferecido a partir de R$ 24,98 para compras de duas unidades ou mais.`
+                        // p.appendChild(span);
+                        // document.getElementById("chatbox").appendChild(p);
+
+                        // document.getElementById("chat-bar-bottom").scrollIntoView(true);
+                    });
+                }
+            } catch (error) {
+                console.log(error);
+            }
         }
-    }
-
-    function SalvaPergunta(pergunta) {
-        // Monta os dados que serão enviados na requisição
-        let dados = new FormData()
-        dados.append('pergunta', pergunta)
-        // Ajax(Requisição)
-        // $.ajax({
-        //     url: 'http://localhost/Proj_RDV/chatBot/chat.php',
-        //     method: 'post',
-        //     data: dados,
-        //     processData: false,
-        //     contentType: false,
-        //     dataType: 'json'
-        // }).done(function (resposta) {// Trata o retorno da requisição
-        //     if (resposta.tipo === 'E') {
-        //         caixaAviso.aviso(resposta.msg)
-        //     }
-        //     if (resposta.tipo === 'OK') {
-        //         return
-        //     }
-        // })
-        return;
     }
 
     function GetTime() {
@@ -108,7 +103,7 @@ No Atacadão, o "Café Brasileiro Tradicional Stand Pack" de 500 g é oferecido 
 
     // Gets the first message
     function FirstBotMessage() {
-        let firstMessage = "Olá, seja Bem-Vindo! Qual produto deseja consultar os preços?";
+        let firstMessage = `Olá, seja Bem-Vindo! Qual produto deseja consultar os preços?`;
         document.getElementById("botStarterMessage").innerHTML = '<p class="botText"><span>' + firstMessage + '</span></p>';
 
         let time = GetTime();
@@ -119,15 +114,15 @@ No Atacadão, o "Café Brasileiro Tradicional Stand Pack" de 500 g é oferecido 
     }
 
     // Retrieves the response
-    function GetHardResponse(userText) {
-        let botResponse = GetBotResponse(userText);
+    async function GetHardResponse(userText) {
+        let botResponse = await GetBotResponse(userText);
         const p = document.createElement("p");
         p.classList.add("botText");
 
         const span = document.createElement("span");
-        const text = document.createTextNode(botResponse);
+        const text = document.createTextNode("Pesquisando...");
         span.appendChild(text)
-       
+
         p.appendChild(span);
         document.getElementById("chatbox").appendChild(p);
 
@@ -135,7 +130,7 @@ No Atacadão, o "Café Brasileiro Tradicional Stand Pack" de 500 g é oferecido 
     }
 
     //Gets the text text from the input box and processes it
-    function GetResponse() {
+    async function GetResponse() {
         let userText = document.getElementById("textInput").value;
 
         if (userText === "") {
@@ -147,9 +142,9 @@ No Atacadão, o "Café Brasileiro Tradicional Stand Pack" de 500 g é oferecido 
         const span = document.createElement("span");
         const text = document.createTextNode(userText);
         span.appendChild(text)
-       
+
         p.appendChild(span);
-        
+
         document.getElementById("chatbox").appendChild(p);
         document.getElementById("chat-bar-bottom").scrollIntoView(true);
 
@@ -167,14 +162,14 @@ No Atacadão, o "Café Brasileiro Tradicional Stand Pack" de 500 g é oferecido 
         const span = document.createElement("span");
         const text = document.createTextNode(sampleText);
         span.appendChild(text)
-       
+
         p.appendChild(span);
         document.getElementById("textInput").value = "";
         document.getElementById("chatbox").appendChild(p);
         document.getElementById("chat-bar-bottom").scrollIntoView(true);
     }
 
-    function SendButton() {
+    async function SendButton() {
         GetResponse();
     }
 
@@ -187,7 +182,7 @@ No Atacadão, o "Café Brasileiro Tradicional Stand Pack" de 500 g é oferecido 
             {/* <!-- CHAT BAR BLOCK --> */}
             <div className="chat-bar-collapsible">
                 <button id="chat-button" type="button" className="collapsible">Consute os preços!
-                    <FaCommentsDollar  id="chat-icon" style={{ color: '#fff' }} />
+                    <FaCommentsDollar id="chat-icon" style={{ color: '#fff' }} />
                 </button>
 
                 <div className="content_chat">
@@ -197,7 +192,7 @@ No Atacadão, o "Café Brasileiro Tradicional Stand Pack" de 500 g é oferecido 
                             <div className="chat-container">
                                 {/* <!-- Messages --> */}
                                 <div id="chatbox">
-                                    <h5 id="chat-timestamp">A</h5>
+                                    <h5 id="chat-timestamp"></h5>
                                     <p id="botStarterMessage" className="botText"><span>Carregando...</span></p>
                                 </div>
                                 {/* 
@@ -210,8 +205,8 @@ No Atacadão, o "Café Brasileiro Tradicional Stand Pack" de 500 g é oferecido 
                                     </div>
 
                                     <div className="chat-bar-icons">
-                                        <FaHeart id="chat-icon" style={{ color: '#fff' }} onClick={() => HeartButton()} />
-                                        <FaGreaterThan id="chat-icon" style={{ color: '#333' }} onClick={() => SendButton()}/>
+                                        {/* <FaHeart id="chat-icon" style={{ color: '#fff' }} onClick={() => HeartButton()} /> */}
+                                        <FaGreaterThan id="chat-icon" style={{ color: '#333' }} onClick={() => SendButton()} />
                                     </div>
                                 </div>
 

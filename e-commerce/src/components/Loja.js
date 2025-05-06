@@ -3,6 +3,7 @@ import Card from './CardLoja.js'
 import "../styles/main.css";
 import "../styles/popup.css";
 import Icons from './Icons.js';
+import ChatBot from './ChatBot.js';
 
 export default function Loja() {
 
@@ -535,6 +536,8 @@ export default function Loja() {
                 </div>
             </form>
             <Icons isClient={isClient} setIsClient={() => setIsClient()} />
+                
+    <ChatBot />
         </main>
     )
 }
