@@ -1,11 +1,12 @@
 // Requires
-const GEMINI_API_KEY = 'AIzaSyB6zns_Dk6e-VaJOEgkoJLCWkECQZJtOwc';
-const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=${GEMINI_API_KEY}`;
+const API_KEY = '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';
+const API_URL = `https://api.groq.com/openai/v1/chat/completions`;
 
 const express = require('express');
 const cors = require("cors");
 var mysql = require('mysql2');
 const axios = require('axios');
+const marked = require('marked');
 
 // Banco
 var con = mysql.createConnection({
@@ -474,37 +475,37 @@ function log(transacao, tabela, dados) {
 app.post("/BOT/:cliente", async (req, res) => {
     const { pergunta } = req.body;
     const { cliente } = req.params;
+    produtos = '';
 
+    con.query(`SELECT nome_prod, valor_prod FROM produto WHERE situacao_prod = 'A'`, function (err, result, fields) {
+        if (err) throw err;
+        result.forEach(produto => {
+            produtos += `${produto.nome_prod} - R$${produto.valor_prod}; `;
+        })
+    });
+    
     try {
-        const resposta = await axios.post(GEMINI_API_URL, {
-            contents: [
-                {
-                    role: "user",
-                    parts: [{ text: pergunta }],
-                },
-            ],
-        });
-
-        const texto = resposta.data.candidates?.[0]?.content?.parts?.[0]?.text || 'Sem resposta';
-        console.log(texto);
-        res.json({ resposta: texto });
-
+        const resposta = await axios.post(API_URL,
+            {
+                "model": "llama-3.3-70b-versatile",
+                "messages": [{
+                    "role": "user",
+                    "content": `Quais ingredientes para fazer uma receita de ${pergunta}?`
+                }]
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${API_KEY}`,
+                    'Content-Type': 'application/json'
+                }
+            }
+        );
+        console.log(`Monte uma receita de ${pergunta} com os seguintes ingredientes e some o valor final da receita ${produtos}`);
+        const botReply = resposta.data.choices[0].message?.content || "Erro ao gerar resposta";
+        const htmlText = marked.marked(botReply);
+        res.json({ reply: `${htmlText}` });
     } catch (error) {
-        console.error("Erro completo:", {
-            status: error?.response?.status,
-            data: error?.response?.data,
-            message: error.message
-        });
-        res.status(500).json({ erro: 'Erro ao chamar a API do Gemini.' });
+        console.error(error.resposta?.data || error.message);
+        res.status(500).json({ error: 'Erro ao chamar a API.' });
     }
-
-    // con.query(`SELECT * FROM endereco WHERE id_cliente_end = ${cliente} AND situacao_end = 'A' LIMIT 1`, function (err, result, fields) {
-    //     if (err) throw err;
-    //     let endereco = '';
-    //     if (result.length !== 0) {
-    //         endereco = `${result[0].rua_end}, ${result[0].numero_end} - ${result[0].bairro_end}, ${result[0].cidade}/${result[0].UF}, ${result[0].cep_end}.`
-    //     }
-
-    //     res.send(result);
-    // });
-}); 
+});

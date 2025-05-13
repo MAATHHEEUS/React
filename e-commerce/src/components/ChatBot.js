@@ -64,18 +64,18 @@ export default function ChatBot() {
                 else {
                     const conexaoConvertida = conexao.json();
                     conexaoConvertida.then(res => {
-                        console.log('res');
-                        // const p = document.createElement("p");
-                        // p.classList.add("botText");
+                        const p = document.createElement("p");
+                        p.classList.add("botText");
 
-                        // const span = document.createElement("span");
-                        // const text = document.createTextNode(`Res ${res[0].id_end}`);
+                        const span = document.createElement("span");
+                        // const text = document.createTextNode(`${res.reply}`);
                         // span.appendChild(text)
 
-                        // p.appendChild(span);
-                        // document.getElementById("chatbox").appendChild(p);
+                        span.innerHTML = res.reply;
+                        p.appendChild(span);
+                        document.getElementById("chatbox").appendChild(p);
 
-                        // document.getElementById("chat-bar-bottom").scrollIntoView(true);
+                        document.getElementById("chat-bar-bottom").scrollIntoView(true);
                     });
                 }
             } catch (error) {
@@ -103,7 +103,7 @@ export default function ChatBot() {
 
     // Gets the first message
     function FirstBotMessage() {
-        let firstMessage = `Olá, seja Bem-Vindo! Qual produto deseja consultar os preços?`;
+        let firstMessage = `Olá, seja Bem-Vindo! Qual receita eu posso te sugerir hoje? Ex.: Lasanha`;
         document.getElementById("botStarterMessage").innerHTML = '<p class="botText"><span>' + firstMessage + '</span></p>';
 
         let time = GetTime();
@@ -181,7 +181,7 @@ export default function ChatBot() {
         <>
             {/* <!-- CHAT BAR BLOCK --> */}
             <div className="chat-bar-collapsible">
-                <button id="chat-button" type="button" className="collapsible">Consute os preços!
+                <button id="chat-button" type="button" className="collapsible">Consulte receitas!
                     <FaCommentsDollar id="chat-icon" style={{ color: '#fff' }} />
                 </button>
 
